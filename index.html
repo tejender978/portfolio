@@ -1,0 +1,1297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tajender Verma | Account & Billing Executive</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #c9a84c;
+    --gold-light: #e8cc7a;
+    --dark: #0a0a0f;
+    --dark2: #12121a;
+    --dark3: #1a1a26;
+    --cream: #f5f0e8;
+    --cream2: #ede6d8;
+    --text: #d4cfc7;
+    --accent: #4c7bc9;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--dark);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* CUSTOM CURSOR */
+  .cursor {
+    width: 12px; height: 12px;
+    background: var(--gold);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.15s ease;
+    mix-blend-mode: difference;
+  }
+  .cursor-ring {
+    width: 36px; height: 36px;
+    border: 1px solid var(--gold);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9998;
+    transition: all 0.35s ease;
+    opacity: 0.6;
+  }
+
+  /* 3D CANVAS */
+  #bg-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 4rem;
+    backdrop-filter: blur(20px);
+    background: rgba(10,10,15,0.6);
+    border-bottom: 1px solid rgba(201,168,76,0.15);
+  }
+
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--gold);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .nav-links {
+    display: flex; gap: 2.5rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: color 0.3s;
+    position: relative;
+  }
+
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px; left: 0;
+    width: 0; height: 1px;
+    background: var(--gold);
+    transition: width 0.3s ease;
+  }
+
+  .nav-links a:hover { color: var(--gold); }
+  .nav-links a:hover::after { width: 100%; }
+
+  /* SECTIONS */
+  section {
+    position: relative;
+    z-index: 10;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* HERO */
+  #hero {
+    flex-direction: column;
+    text-align: center;
+    padding: 6rem 2rem 4rem;
+    overflow: hidden;
+  }
+
+  .hero-eyebrow {
+    font-size: 0.75rem;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 1s ease 0.3s forwards;
+  }
+
+  .hero-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(4rem, 10vw, 9rem);
+    font-weight: 300;
+    line-height: 0.9;
+    color: var(--cream);
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 1s ease 0.6s forwards;
+  }
+
+  .hero-name span {
+    display: block;
+    color: var(--gold);
+    font-weight: 700;
+  }
+
+  .hero-title {
+    font-size: 1rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text);
+    margin-bottom: 3rem;
+    opacity: 0;
+    animation: fadeUp 1s ease 0.9s forwards;
+  }
+
+  .hero-cta {
+    display: inline-block;
+    padding: 1rem 3rem;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    text-decoration: none;
+    font-size: 0.8rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    opacity: 0;
+    animation: fadeUp 1s ease 1.2s forwards;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-cta::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: var(--gold);
+    transition: left 0.3s ease;
+    z-index: -1;
+  }
+
+  .hero-cta:hover { color: var(--dark); }
+  .hero-cta:hover::before { left: 0; }
+
+  .scroll-indicator {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    opacity: 0;
+    animation: fadeIn 1s ease 2s forwards;
+  }
+
+  .scroll-indicator span {
+    font-size: 0.65rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  .scroll-line {
+    width: 1px;
+    height: 60px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+    animation: scrollPulse 2s ease infinite;
+  }
+
+  /* STATS STRIP */
+  .stats-strip {
+    position: relative; z-index: 10;
+    background: var(--dark2);
+    border-top: 1px solid rgba(201,168,76,0.2);
+    border-bottom: 1px solid rgba(201,168,76,0.2);
+    padding: 2rem 4rem;
+    display: flex;
+    justify-content: center;
+    gap: 5rem;
+    flex-wrap: wrap;
+  }
+
+  .stat-item {
+    text-align: center;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.6s ease;
+  }
+
+  .stat-item.visible { opacity: 1; transform: translateY(0); }
+
+  .stat-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: var(--gold);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text);
+    margin-top: 0.25rem;
+  }
+
+  /* ABOUT */
+  #about {
+    padding: 8rem 4rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: center;
+    min-height: auto;
+  }
+
+  .about-visual {
+    position: relative;
+    height: 500px;
+  }
+
+  .about-card-3d {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    animation: float3d 6s ease infinite;
+  }
+
+  .profile-frame {
+    position: absolute;
+    width: 280px;
+    height: 350px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 2px solid var(--gold);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--dark2);
+    overflow: hidden;
+    box-shadow: 0 0 60px rgba(201,168,76,0.15), inset 0 0 60px rgba(201,168,76,0.05);
+  }
+
+  .profile-initials {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 8rem;
+    font-weight: 700;
+    color: var(--gold);
+    opacity: 0.3;
+  }
+
+  .profile-badge {
+    position: absolute;
+    background: var(--gold);
+    color: var(--dark);
+    padding: 0.4rem 1rem;
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .badge-top { top: 1.5rem; right: 1.5rem; }
+  .badge-bottom { bottom: 1.5rem; left: 1.5rem; }
+
+  .deco-ring {
+    position: absolute;
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 50%;
+    animation: spin 20s linear infinite;
+  }
+
+  .ring1 { width: 380px; height: 380px; top: 50%; left: 50%; transform: translate(-50%,-50%); }
+  .ring2 { width: 450px; height: 450px; top: 50%; left: 50%; transform: translate(-50%,-50%); animation-direction: reverse; animation-duration: 30s; }
+
+  .about-content h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3rem;
+    font-weight: 300;
+    color: var(--cream);
+    margin-bottom: 1.5rem;
+    line-height: 1.1;
+  }
+
+  .about-content h2 em {
+    color: var(--gold);
+    font-style: normal;
+    font-weight: 700;
+  }
+
+  .about-content p {
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: var(--text);
+    margin-bottom: 1.5rem;
+    opacity: 0.85;
+  }
+
+  .contact-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 2rem;
+  }
+
+  .contact-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.85rem;
+  }
+
+  .contact-dot {
+    width: 6px; height: 6px;
+    background: var(--gold);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* EXPERIENCE */
+  #experience {
+    padding: 8rem 4rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    flex-direction: column;
+    min-height: auto;
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 5rem;
+  }
+
+  .section-eyebrow {
+    font-size: 0.7rem;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1rem;
+  }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 300;
+    color: var(--cream);
+  }
+
+  .timeline {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0; bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+    transform: translateX(-50%);
+  }
+
+  .timeline-item {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 2rem;
+    align-items: center;
+    margin-bottom: 3rem;
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 0.7s ease;
+  }
+
+  .timeline-item.visible { opacity: 1; transform: translateY(0); }
+
+  .timeline-item:nth-child(odd) .timeline-card { grid-column: 1; grid-row: 1; text-align: right; }
+  .timeline-item:nth-child(odd) .timeline-empty { grid-column: 3; grid-row: 1; }
+  .timeline-item:nth-child(even) .timeline-card { grid-column: 3; grid-row: 1; text-align: left; }
+  .timeline-item:nth-child(even) .timeline-empty { grid-column: 1; grid-row: 1; }
+
+  .timeline-dot {
+    width: 16px; height: 16px;
+    background: var(--gold);
+    border-radius: 50%;
+    border: 3px solid var(--dark);
+    box-shadow: 0 0 20px rgba(201,168,76,0.5);
+    flex-shrink: 0;
+    grid-column: 2;
+    grid-row: 1;
+    z-index: 1;
+  }
+
+  .timeline-card {
+    background: var(--dark2);
+    border: 1px solid rgba(201,168,76,0.15);
+    padding: 1.75rem;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .timeline-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: var(--gold);
+    transform: scaleY(0);
+    transition: transform 0.3s ease;
+    transform-origin: top;
+  }
+
+  .timeline-card:hover::before { transform: scaleY(1); }
+  .timeline-card:hover { border-color: rgba(201,168,76,0.4); box-shadow: 0 10px 40px rgba(0,0,0,0.4); }
+
+  .card-company {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--cream);
+    margin-bottom: 0.25rem;
+  }
+
+  .card-role {
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.25rem;
+  }
+
+  .card-period {
+    font-size: 0.75rem;
+    color: var(--text);
+    opacity: 0.6;
+    margin-bottom: 1rem;
+  }
+
+  .card-desc {
+    font-size: 0.85rem;
+    line-height: 1.7;
+    color: var(--text);
+    opacity: 0.8;
+  }
+
+  .card-location {
+    display: inline-block;
+    margin-top: 0.75rem;
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+    color: var(--gold);
+    opacity: 0.7;
+  }
+
+  /* SKILLS */
+  #skills {
+    padding: 8rem 4rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    flex-direction: column;
+    min-height: auto;
+    background: transparent;
+  }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    width: 100%;
+  }
+
+  .skill-category {
+    background: var(--dark2);
+    border: 1px solid rgba(201,168,76,0.12);
+    padding: 2.5rem;
+    border-radius: 2px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s ease;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+  }
+
+  .skill-category.visible { opacity: 1; transform: translateY(0); }
+  .skill-category:hover { border-color: rgba(201,168,76,0.4); box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
+
+  .skill-category-icon {
+    font-size: 2rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .skill-category-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    color: var(--cream);
+    margin-bottom: 1.5rem;
+  }
+
+  .skill-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .skill-name {
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    color: var(--text);
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .skill-bar {
+    height: 2px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 1px;
+    overflow: hidden;
+  }
+
+  .skill-fill {
+    height: 100%;
+    background: linear-gradient(to right, var(--gold), var(--gold-light));
+    border-radius: 1px;
+    width: 0;
+    transition: width 1.5s ease;
+  }
+
+  /* CERTIFICATIONS */
+  #certifications {
+    padding: 8rem 4rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    flex-direction: column;
+    min-height: auto;
+  }
+
+  .certs-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    width: 100%;
+  }
+
+  .cert-card {
+    background: var(--dark2);
+    border: 1px solid rgba(201,168,76,0.12);
+    padding: 2rem;
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+    transition: all 0.3s ease;
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: opacity 0.5s ease, transform 0.5s ease, border-color 0.3s, box-shadow 0.3s;
+  }
+
+  .cert-card.visible { opacity: 1; transform: translateX(0); }
+  .cert-card:hover { border-color: rgba(201,168,76,0.4); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+
+  .cert-icon {
+    width: 44px; height: 44px;
+    background: rgba(201,168,76,0.1);
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+  }
+
+  .cert-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    color: var(--cream);
+    margin-bottom: 0.25rem;
+  }
+
+  .cert-issuer {
+    font-size: 0.75rem;
+    color: var(--gold);
+    letter-spacing: 1px;
+    margin-bottom: 0.2rem;
+  }
+
+  .cert-year {
+    font-size: 0.75rem;
+    color: var(--text);
+    opacity: 0.5;
+  }
+
+  /* CONTACT */
+  #contact {
+    padding: 8rem 4rem;
+    flex-direction: column;
+    text-align: center;
+    background: var(--dark2);
+    border-top: 1px solid rgba(201,168,76,0.1);
+  }
+
+  .contact-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3rem, 7vw, 7rem);
+    font-weight: 300;
+    color: var(--cream);
+    line-height: 1;
+    margin-bottom: 2rem;
+  }
+
+  .contact-title span { color: var(--gold); }
+
+  .contact-links {
+    display: flex;
+    gap: 3rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 3rem;
+  }
+
+  .contact-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    transition: all 0.3s;
+  }
+
+  .contact-link-icon {
+    width: 56px; height: 56px;
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    transition: all 0.3s;
+    background: transparent;
+  }
+
+  .contact-link:hover .contact-link-icon {
+    background: var(--gold);
+    border-color: var(--gold);
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(201,168,76,0.3);
+  }
+
+  .contact-link-label {
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text);
+    opacity: 0.6;
+  }
+
+  .contact-info-text {
+    font-size: 0.9rem;
+    color: var(--text);
+    opacity: 0.7;
+    line-height: 1.9;
+    margin-top: 1rem;
+  }
+
+  /* FOOTER */
+  footer {
+    position: relative; z-index: 10;
+    padding: 2rem 4rem;
+    background: var(--dark);
+    border-top: 1px solid rgba(201,168,76,0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  footer span {
+    font-size: 0.75rem;
+    color: var(--text);
+    opacity: 0.4;
+    letter-spacing: 1px;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    to { opacity: 1; }
+  }
+
+  @keyframes scrollPulse {
+    0%, 100% { transform: scaleY(1); opacity: 1; }
+    50% { transform: scaleY(0.6); opacity: 0.4; }
+  }
+
+  @keyframes float3d {
+    0%, 100% { transform: translateY(0) rotateX(2deg) rotateY(2deg); }
+    33% { transform: translateY(-15px) rotateX(-2deg) rotateY(4deg); }
+    66% { transform: translateY(-8px) rotateX(4deg) rotateY(-2deg); }
+  }
+
+  @keyframes spin {
+    to { transform: translate(-50%,-50%) rotate(360deg); }
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    nav { padding: 1.2rem 1.5rem; }
+    .nav-links { gap: 1.2rem; }
+    #about { grid-template-columns: 1fr; gap: 3rem; padding: 5rem 1.5rem; }
+    .about-visual { height: 300px; }
+    #experience { padding: 5rem 1.5rem; }
+    .timeline::before { left: 16px; }
+    .timeline-item { grid-template-columns: auto 1fr; gap: 1rem; }
+    .timeline-item:nth-child(odd) .timeline-card,
+    .timeline-item:nth-child(even) .timeline-card { grid-column: 2; text-align: left; }
+    .timeline-item:nth-child(odd) .timeline-empty,
+    .timeline-item:nth-child(even) .timeline-empty { display: none; }
+    .timeline-dot { grid-column: 1; }
+    .skills-grid { grid-template-columns: 1fr; padding: 0 1.5rem; }
+    .certs-grid { grid-template-columns: 1fr; padding: 0 1.5rem; }
+    #skills, #certifications { padding: 5rem 1.5rem; }
+    #contact { padding: 5rem 1.5rem; }
+    footer { padding: 1.5rem; flex-direction: column; gap: 0.5rem; text-align: center; }
+    .stats-strip { gap: 2rem; padding: 2rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Custom Cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- 3D Background Canvas -->
+<canvas id="bg-canvas"></canvas>
+
+<!-- Navigation -->
+<nav>
+  <div class="nav-logo">T.Verma</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#certifications">Certs</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <p class="hero-eyebrow">Account & Billing Executive · Mahe, Seychelles</p>
+  <h1 class="hero-name">
+    Tajender<span>Verma</span>
+  </h1>
+  <p class="hero-title">Financial Operations · O2C · AR/AP · GST Compliance</p>
+  <a href="#contact" class="hero-cta">Let's Connect</a>
+  <div class="scroll-indicator">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- STATS STRIP -->
+<div class="stats-strip">
+  <div class="stat-item">
+    <div class="stat-number">7+</div>
+    <div class="stat-label">Years Experience</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number">4</div>
+    <div class="stat-label">Companies</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number">O2C</div>
+    <div class="stat-label">Full Cycle</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number">AI</div>
+    <div class="stat-label">Enabled Workflows</div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about" style="min-height:auto; display:block; padding:8rem 4rem;">
+  <div style="max-width:1200px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:6rem; align-items:center;">
+    <div class="about-visual">
+      <div class="about-card-3d">
+        <div class="deco-ring ring1"></div>
+        <div class="deco-ring ring2"></div>
+        <div class="profile-frame">
+          <div class="profile-initials">TV</div>
+        </div>
+        <div class="profile-badge badge-top">India · Seychelles</div>
+        <div class="profile-badge badge-bottom">DOB: 15 Sep 1999</div>
+      </div>
+    </div>
+    <div class="about-content">
+      <h2>Detail-Oriented <em>Financial</em> Professional</h2>
+      <p>With over 7 years of hands-on experience in financial operations, billing, and team supervision across the logistics and food industries, I bring precision and efficiency to every financial process I manage.</p>
+      <p>Expert in the full Order-to-Cash (O2C) cycle, Accounts Receivable (AR), and Accounts Payable (AP), with a proven ability to optimize workflows using AI Prompt Engineering and advanced Excel.</p>
+      <div class="contact-row">
+        <div class="contact-item">
+          <div class="contact-dot"></div>
+          <span>📍 Mahe, Seychelles · Nationality: Indian</span>
+        </div>
+        <div class="contact-item">
+          <div class="contact-dot"></div>
+          <span>📞 +91 97841 42791</span>
+        </div>
+        <div class="contact-item">
+          <div class="contact-dot"></div>
+          <span>✉️ Tejender978@gmail.com</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience" style="min-height:auto; display:block; padding:8rem 4rem;">
+  <div style="max-width:1100px; margin:0 auto;">
+    <div class="section-header">
+      <p class="section-eyebrow">Career Journey</p>
+      <h2 class="section-title">Work Experience</h2>
+    </div>
+    <div class="timeline">
+
+      <div class="timeline-item">
+        <div class="timeline-card">
+          <div class="card-company">International Food Solution Pty Ltd</div>
+          <div class="card-role">Account & Billing Executive</div>
+          <div class="card-period">Feb 2025 – Present</div>
+          <p class="card-desc">Managed full O2C cycle including sales orders, invoicing, and AR resolution. Implemented AI Prompt Engineering for workflow automation. Supported month-end closing with AR, AP, and Petty Cash reconciliations.</p>
+          <span class="card-location">📍 Mahe, Seychelles</span>
+        </div>
+        <div class="timeline-dot"></div>
+        <div class="timeline-empty"></div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-empty"></div>
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <div class="card-company">CJ DARCL Logistics Ltd</div>
+          <div class="card-role">Account Assistant</div>
+          <div class="card-period">Nov 2024 – Feb 2025</div>
+          <p class="card-desc">Prepared vouchers, cash & bank statements. Managed end-to-end reconciliation of cash books, sundry debtors, and GST 2B. Executed TDS calculations and supported GST return filing.</p>
+          <span class="card-location">📍 Panipat, Haryana, India</span>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-card">
+          <div class="card-company">Associated Road Carriers Ltd</div>
+          <div class="card-role">Cashier</div>
+          <div class="card-period">Sep 2023 – Nov 2024</div>
+          <p class="card-desc">Handled cash & bank accounts with reconciliations. Conducted branch audits, issued money receipts, and negotiated vendor rates for logistics operations.</p>
+          <span class="card-location">📍 Kundli, Haryana, India</span>
+        </div>
+        <div class="timeline-dot"></div>
+        <div class="timeline-empty"></div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-empty"></div>
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <div class="card-company">TCI Express Ltd</div>
+          <div class="card-role">Account Supervisor</div>
+          <div class="card-period">Oct 2018 – Sep 2023</div>
+          <p class="card-desc">Prepared monthly Business Score Cards and Reports. Led branch functions including cash handling, billing, and EDP work. Managed party ledgers, bank reconciliations, and a full team.</p>
+          <span class="card-location">📍 Lucknow, Uttar Pradesh, India</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills" style="min-height:auto; display:block; padding:8rem 4rem;">
+  <div style="max-width:1100px; margin:0 auto;">
+    <div class="section-header">
+      <p class="section-eyebrow">Expertise</p>
+      <h2 class="section-title">Skills & Tools</h2>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-category">
+        <div class="skill-category-icon">💼</div>
+        <div class="skill-category-title">Finance & Accounting</div>
+        <div class="skill-item">
+          <div class="skill-name"><span>Tally Prime</span><span>95%</span></div>
+          <div class="skill-bar"><div class="skill-fill" data-width="95"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-name"><span>Bank Reconciliation (BRS)</span><span>95%</span></div>
+          <div class="skill-bar"><div class="skill-fill" data-width="95"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-name"><span>GST 2B Reconciliation</span><span>90%</span></div>
+          <div class="skill-bar"><div class="skill-fill" data-width="90"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-name"><span>TDS Calculations</span><span>90%</span></div>
+          <div class="skill-bar"><div class="skill-fill" data-width="90"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-name"><span>AR / AP / O2C Cycle</span><span>95%</span></div>
+          <div class="skill-bar"><div class="skill-fill" data-width="95"></div></div>
+        </div>
+      </div>
+
+      <div class="skill-category">
+        <div class="skill-category-icon">💻</div>
+        <div class="skill-category-title">Technical & IT</div>
+        <div class="skill-item">
+          <div class="skill-name"><span>Advanced Excel</span><span>90%</span></div>
+          <div class="skill-bar"><div class="skill-fill" data-width="90"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-name"><span>Power BI</span><span>75%</span></div>
+          <div class="skill-bar"><div class="skill-fill" data-width="75"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-name"><span>AI Prompt Engineering</span><span>85%</span></div>
+          <div class="skill-bar"><div class="skill-fill" data-width="85"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-name"><span>ERP / Orion</span><span>80%</span></div>
+          <div class="skill-bar"><div class="skill-fill" data-width="80"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-name"><span>RS-CIT (IT Certificate)</span><span>88%</span></div>
+          <div class="skill-bar"><div class="skill-fill" data-width="88"></div></div>
+        </div>
+      </div>
+
+      <div class="skill-category">
+        <div class="skill-category-icon">🎯</div>
+        <div class="skill-category-title">Operations & Management</div>
+        <div class="skill-item">
+          <div class="skill-name"><span>Team Leadership</span><span>88%</span></div>
+          <div class="skill-bar"><div class="skill-fill" data-width="88"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-name"><span>Vendor Management</span><span>90%</span></div>
+          <div class="skill-bar"><div class="skill-fill" data-width="90"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-name"><span>Inventory Management</span><span>82%</span></div>
+          <div class="skill-bar"><div class="skill-fill" data-width="82"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-name"><span>Customer Relations (CRM)</span><span>85%</span></div>
+          <div class="skill-bar"><div class="skill-fill" data-width="85"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-name"><span>Branch Audits</span><span>88%</span></div>
+          <div class="skill-bar"><div class="skill-fill" data-width="88"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CERTIFICATIONS -->
+<section id="certifications" style="min-height:auto; display:block; padding:8rem 4rem;">
+  <div style="max-width:1100px; margin:0 auto;">
+    <div class="section-header">
+      <p class="section-eyebrow">Qualifications</p>
+      <h2 class="section-title">Education & Certifications</h2>
+    </div>
+    <div class="certs-grid">
+      <div class="cert-card">
+        <div class="cert-icon">🎓</div>
+        <div>
+          <div class="cert-title">B.Com — Bachelor of Commerce</div>
+          <div class="cert-issuer">OPJS University</div>
+          <div class="cert-year">2017 – 2019</div>
+        </div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-icon">📊</div>
+        <div>
+          <div class="cert-title">Advanced Excel Certification</div>
+          <div class="cert-issuer">STP Computer Education · Ministry of MSME</div>
+          <div class="cert-year">2024</div>
+        </div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-icon">🤖</div>
+        <div>
+          <div class="cert-title">AI Tools Workshop</div>
+          <div class="cert-issuer">Be10x</div>
+          <div class="cert-year">Nov 2025</div>
+        </div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-icon">💹</div>
+        <div>
+          <div class="cert-title">Tally Prime Certification</div>
+          <div class="cert-issuer">STP Computer Education · Ministry of MSME</div>
+          <div class="cert-year">2024</div>
+        </div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-icon">💻</div>
+        <div>
+          <div class="cert-title">RS-CIT</div>
+          <div class="cert-issuer">Vardhman Mahaveer Open University · Rajasthan</div>
+          <div class="cert-year">2016 – 2017</div>
+        </div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-icon">📚</div>
+        <div>
+          <div class="cert-title">12th Standard · RBSC Board</div>
+          <div class="cert-issuer">Rajasthan Board of Secondary Education, Ajmer</div>
+          <div class="cert-year">2017</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div style="max-width:800px;">
+    <p class="section-eyebrow" style="margin-bottom:1.5rem;">Get In Touch</p>
+    <h2 class="contact-title">Let's <span>Work</span> Together</h2>
+    <p class="contact-info-text">
+      Open to new opportunities in Finance, Accounting & Billing Management.<br>
+      Currently based in Mahe, Seychelles.
+    </p>
+    <div class="contact-links">
+      <a class="contact-link" href="mailto:Tejender978@gmail.com">
+        <div class="contact-link-icon">✉️</div>
+        <span class="contact-link-label">Email</span>
+      </a>
+      <a class="contact-link" href="tel:+919784142791">
+        <div class="contact-link-icon">📞</div>
+        <span class="contact-link-label">Phone</span>
+      </a>
+      <a class="contact-link" href="#">
+        <div class="contact-link-icon">💼</div>
+        <span class="contact-link-label">LinkedIn</span>
+      </a>
+    </div>
+    <div style="margin-top:3rem; padding:1.5rem; border:1px solid rgba(201,168,76,0.2); background:rgba(201,168,76,0.04);">
+      <p style="font-size:0.85rem; color:var(--text); opacity:0.7; line-height:1.8;">
+        📧 Tejender978@gmail.com &nbsp;|&nbsp; 📞 +91 97841 42791 &nbsp;|&nbsp; 📍 Mahe, Seychelles
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span>© 2025 Tajender Verma. All Rights Reserved.</span>
+  <span>Account & Billing Executive · Mahe, Seychelles</span>
+</footer>
+
+<script>
+// === CUSTOM CURSOR ===
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = mx - 6 + 'px';
+  cursor.style.top = my - 6 + 'px';
+});
+
+function animRing() {
+  rx += (mx - rx) * 0.12;
+  ry += (my - ry) * 0.12;
+  ring.style.left = rx - 18 + 'px';
+  ring.style.top = ry - 18 + 'px';
+  requestAnimationFrame(animRing);
+}
+animRing();
+
+document.querySelectorAll('a, button').forEach(el => {
+  el.addEventListener('mouseenter', () => { cursor.style.transform = 'scale(2)'; ring.style.transform = 'scale(1.5)'; });
+  el.addEventListener('mouseleave', () => { cursor.style.transform = 'scale(1)'; ring.style.transform = 'scale(1)'; });
+});
+
+// === 3D PARTICLE BACKGROUND ===
+const canvas = document.getElementById('bg-canvas');
+const ctx = canvas.getContext('2d');
+let W, H, particles = [], mouse = { x: W/2, y: H/2 };
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+document.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+
+class Particle {
+  constructor() { this.reset(); }
+  reset() {
+    this.x = Math.random() * W;
+    this.y = Math.random() * H;
+    this.z = Math.random() * 1200 + 100;
+    this.ox = this.x;
+    this.oy = this.y;
+    this.size = Math.random() * 1.5 + 0.3;
+    this.speed = Math.random() * 0.3 + 0.05;
+    this.opacity = Math.random() * 0.6 + 0.1;
+    this.color = Math.random() > 0.7 ? '#c9a84c' : '#4a4a6a';
+    this.connected = [];
+  }
+  update() {
+    this.y -= this.speed;
+    const dx = (mouse.x - W/2) / W * 0.5;
+    const dy = (mouse.y - H/2) / H * 0.5;
+    this.x += dx;
+    if (this.y < -10) { this.y = H + 10; this.x = Math.random() * W; }
+  }
+  draw() {
+    const scale = 600 / this.z;
+    const px = (this.x - W/2) * scale + W/2;
+    const py = (this.y - H/2) * scale + H/2;
+    const r = this.size * scale;
+    ctx.beginPath();
+    ctx.arc(px, py, Math.max(0.1, r), 0, Math.PI*2);
+    ctx.fillStyle = this.color;
+    ctx.globalAlpha = this.opacity * (scale * 0.4);
+    ctx.fill();
+    ctx.globalAlpha = 1;
+    return { px, py };
+  }
+}
+
+for (let i = 0; i < 180; i++) particles.push(new Particle());
+
+// Lines between nearby particles
+function drawConnections() {
+  for (let i = 0; i < particles.length; i++) {
+    const a = particles[i];
+    const scaleA = 600 / a.z;
+    const pax = (a.x - W/2) * scaleA + W/2;
+    const pay = (a.y - H/2) * scaleA + H/2;
+    for (let j = i+1; j < particles.length; j++) {
+      const b = particles[j];
+      const scaleB = 600 / b.z;
+      const pbx = (b.x - W/2) * scaleB + W/2;
+      const pby = (b.y - H/2) * scaleB + H/2;
+      const dist = Math.hypot(pax - pbx, pay - pby);
+      if (dist < 100) {
+        ctx.beginPath();
+        ctx.moveTo(pax, pay);
+        ctx.lineTo(pbx, pby);
+        ctx.strokeStyle = `rgba(201,168,76,${(1 - dist/100) * 0.08})`;
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
+      }
+    }
+  }
+}
+
+function animate() {
+  ctx.clearRect(0, 0, W, H);
+  drawConnections();
+  particles.forEach(p => { p.update(); p.draw(); });
+  requestAnimationFrame(animate);
+}
+animate();
+
+// === SCROLL ANIMATIONS ===
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      // Animate skill bars
+      entry.target.querySelectorAll('.skill-fill').forEach(bar => {
+        bar.style.width = bar.dataset.width + '%';
+      });
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.timeline-item, .skill-category, .cert-card, .stat-item').forEach(el => {
+  observer.observe(el);
+});
+
+// Stagger delays
+document.querySelectorAll('.timeline-item').forEach((el, i) => {
+  el.style.transitionDelay = (i * 0.15) + 's';
+});
+document.querySelectorAll('.skill-category').forEach((el, i) => {
+  el.style.transitionDelay = (i * 0.15) + 's';
+});
+document.querySelectorAll('.cert-card').forEach((el, i) => {
+  el.style.transitionDelay = (i * 0.1) + 's';
+});
+document.querySelectorAll('.stat-item').forEach((el, i) => {
+  el.style.transitionDelay = (i * 0.1) + 's';
+});
+
+// Smooth nav scroll
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    document.querySelector(a.getAttribute('href'))?.scrollIntoView({ behavior: 'smooth' });
+  });
+});
+
+// Counter animation for stats
+function animateCount(el, target, suffix = '') {
+  let start = 0;
+  const step = target / 40;
+  const timer = setInterval(() => {
+    start += step;
+    if (start >= target) { el.textContent = target + suffix; clearInterval(timer); return; }
+    el.textContent = Math.floor(start) + suffix;
+  }, 30);
+}
+</script>
+</body>
+</html>
