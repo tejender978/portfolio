@@ -1,1297 +1,219 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tajender Verma | Account & Billing Executive</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tejender Verma · Kinetic Data Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --gold: #c9a84c;
-    --gold-light: #e8cc7a;
-    --dark: #0a0a0f;
-    --dark2: #12121a;
-    --dark3: #1a1a26;
-    --cream: #f5f0e8;
-    --cream2: #ede6d8;
-    --text: #d4cfc7;
-    --accent: #4c7bc9;
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  html { scroll-behavior: smooth; }
-
-  body {
-    background: var(--dark);
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    overflow-x: hidden;
-    cursor: none;
-  }
-
-  /* CUSTOM CURSOR */
-  .cursor {
-    width: 12px; height: 12px;
-    background: var(--gold);
-    border-radius: 50%;
-    position: fixed;
-    pointer-events: none;
-    z-index: 9999;
-    transition: transform 0.15s ease;
-    mix-blend-mode: difference;
-  }
-  .cursor-ring {
-    width: 36px; height: 36px;
-    border: 1px solid var(--gold);
-    border-radius: 50%;
-    position: fixed;
-    pointer-events: none;
-    z-index: 9998;
-    transition: all 0.35s ease;
-    opacity: 0.6;
-  }
-
-  /* 3D CANVAS */
-  #bg-canvas {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    z-index: 0;
-  }
-
-  /* NAV */
-  nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 100;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1.5rem 4rem;
-    backdrop-filter: blur(20px);
-    background: rgba(10,10,15,0.6);
-    border-bottom: 1px solid rgba(201,168,76,0.15);
-  }
-
-  .nav-logo {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.4rem;
-    font-weight: 600;
-    color: var(--gold);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-  }
-
-  .nav-links {
-    display: flex; gap: 2.5rem;
-    list-style: none;
-  }
-
-  .nav-links a {
-    color: var(--text);
-    text-decoration: none;
-    font-size: 0.8rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    transition: color 0.3s;
-    position: relative;
-  }
-
-  .nav-links a::after {
-    content: '';
-    position: absolute;
-    bottom: -4px; left: 0;
-    width: 0; height: 1px;
-    background: var(--gold);
-    transition: width 0.3s ease;
-  }
-
-  .nav-links a:hover { color: var(--gold); }
-  .nav-links a:hover::after { width: 100%; }
-
-  /* SECTIONS */
-  section {
-    position: relative;
-    z-index: 10;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  /* HERO */
-  #hero {
-    flex-direction: column;
-    text-align: center;
-    padding: 6rem 2rem 4rem;
-    overflow: hidden;
-  }
-
-  .hero-eyebrow {
-    font-size: 0.75rem;
-    letter-spacing: 5px;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 2rem;
-    opacity: 0;
-    animation: fadeUp 1s ease 0.3s forwards;
-  }
-
-  .hero-name {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(4rem, 10vw, 9rem);
-    font-weight: 300;
-    line-height: 0.9;
-    color: var(--cream);
-    margin-bottom: 1.5rem;
-    opacity: 0;
-    animation: fadeUp 1s ease 0.6s forwards;
-  }
-
-  .hero-name span {
-    display: block;
-    color: var(--gold);
-    font-weight: 700;
-  }
-
-  .hero-title {
-    font-size: 1rem;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--text);
-    margin-bottom: 3rem;
-    opacity: 0;
-    animation: fadeUp 1s ease 0.9s forwards;
-  }
-
-  .hero-cta {
-    display: inline-block;
-    padding: 1rem 3rem;
-    border: 1px solid var(--gold);
-    color: var(--gold);
-    text-decoration: none;
-    font-size: 0.8rem;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    transition: all 0.3s ease;
-    opacity: 0;
-    animation: fadeUp 1s ease 1.2s forwards;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .hero-cta::before {
-    content: '';
-    position: absolute;
-    top: 0; left: -100%;
-    width: 100%; height: 100%;
-    background: var(--gold);
-    transition: left 0.3s ease;
-    z-index: -1;
-  }
-
-  .hero-cta:hover { color: var(--dark); }
-  .hero-cta:hover::before { left: 0; }
-
-  .scroll-indicator {
-    position: absolute;
-    bottom: 2rem;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-    opacity: 0;
-    animation: fadeIn 1s ease 2s forwards;
-  }
-
-  .scroll-indicator span {
-    font-size: 0.65rem;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--gold);
-  }
-
-  .scroll-line {
-    width: 1px;
-    height: 60px;
-    background: linear-gradient(to bottom, var(--gold), transparent);
-    animation: scrollPulse 2s ease infinite;
-  }
-
-  /* STATS STRIP */
-  .stats-strip {
-    position: relative; z-index: 10;
-    background: var(--dark2);
-    border-top: 1px solid rgba(201,168,76,0.2);
-    border-bottom: 1px solid rgba(201,168,76,0.2);
-    padding: 2rem 4rem;
-    display: flex;
-    justify-content: center;
-    gap: 5rem;
-    flex-wrap: wrap;
-  }
-
-  .stat-item {
-    text-align: center;
-    opacity: 0;
-    transform: translateY(20px);
-    transition: all 0.6s ease;
-  }
-
-  .stat-item.visible { opacity: 1; transform: translateY(0); }
-
-  .stat-number {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 3.5rem;
-    font-weight: 700;
-    color: var(--gold);
-    line-height: 1;
-  }
-
-  .stat-label {
-    font-size: 0.7rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--text);
-    margin-top: 0.25rem;
-  }
-
-  /* ABOUT */
-  #about {
-    padding: 8rem 4rem;
-    max-width: 1200px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 6rem;
-    align-items: center;
-    min-height: auto;
-  }
-
-  .about-visual {
-    position: relative;
-    height: 500px;
-  }
-
-  .about-card-3d {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    transform-style: preserve-3d;
-    animation: float3d 6s ease infinite;
-  }
-
-  .profile-frame {
-    position: absolute;
-    width: 280px;
-    height: 350px;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    border: 2px solid var(--gold);
-    border-radius: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--dark2);
-    overflow: hidden;
-    box-shadow: 0 0 60px rgba(201,168,76,0.15), inset 0 0 60px rgba(201,168,76,0.05);
-  }
-
-  .profile-initials {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 8rem;
-    font-weight: 700;
-    color: var(--gold);
-    opacity: 0.3;
-  }
-
-  .profile-badge {
-    position: absolute;
-    background: var(--gold);
-    color: var(--dark);
-    padding: 0.4rem 1rem;
-    font-size: 0.7rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    font-weight: 500;
-  }
-
-  .badge-top { top: 1.5rem; right: 1.5rem; }
-  .badge-bottom { bottom: 1.5rem; left: 1.5rem; }
-
-  .deco-ring {
-    position: absolute;
-    border: 1px solid rgba(201,168,76,0.2);
-    border-radius: 50%;
-    animation: spin 20s linear infinite;
-  }
-
-  .ring1 { width: 380px; height: 380px; top: 50%; left: 50%; transform: translate(-50%,-50%); }
-  .ring2 { width: 450px; height: 450px; top: 50%; left: 50%; transform: translate(-50%,-50%); animation-direction: reverse; animation-duration: 30s; }
-
-  .about-content h2 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 3rem;
-    font-weight: 300;
-    color: var(--cream);
-    margin-bottom: 1.5rem;
-    line-height: 1.1;
-  }
-
-  .about-content h2 em {
-    color: var(--gold);
-    font-style: normal;
-    font-weight: 700;
-  }
-
-  .about-content p {
-    font-size: 0.95rem;
-    line-height: 1.8;
-    color: var(--text);
-    margin-bottom: 1.5rem;
-    opacity: 0.85;
-  }
-
-  .contact-row {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    margin-top: 2rem;
-  }
-
-  .contact-item {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    font-size: 0.85rem;
-  }
-
-  .contact-dot {
-    width: 6px; height: 6px;
-    background: var(--gold);
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-
-  /* EXPERIENCE */
-  #experience {
-    padding: 8rem 4rem;
-    max-width: 1200px;
-    margin: 0 auto;
-    flex-direction: column;
-    min-height: auto;
-  }
-
-  .section-header {
-    text-align: center;
-    margin-bottom: 5rem;
-  }
-
-  .section-eyebrow {
-    font-size: 0.7rem;
-    letter-spacing: 5px;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 1rem;
-  }
-
-  .section-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(2.5rem, 5vw, 4rem);
-    font-weight: 300;
-    color: var(--cream);
-  }
-
-  .timeline {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-  }
-
-  .timeline::before {
-    content: '';
-    position: absolute;
-    left: 50%;
-    top: 0; bottom: 0;
-    width: 1px;
-    background: linear-gradient(to bottom, transparent, var(--gold), transparent);
-    transform: translateX(-50%);
-  }
-
-  .timeline-item {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    gap: 2rem;
-    align-items: center;
-    margin-bottom: 3rem;
-    opacity: 0;
-    transform: translateY(40px);
-    transition: all 0.7s ease;
-  }
-
-  .timeline-item.visible { opacity: 1; transform: translateY(0); }
-
-  .timeline-item:nth-child(odd) .timeline-card { grid-column: 1; grid-row: 1; text-align: right; }
-  .timeline-item:nth-child(odd) .timeline-empty { grid-column: 3; grid-row: 1; }
-  .timeline-item:nth-child(even) .timeline-card { grid-column: 3; grid-row: 1; text-align: left; }
-  .timeline-item:nth-child(even) .timeline-empty { grid-column: 1; grid-row: 1; }
-
-  .timeline-dot {
-    width: 16px; height: 16px;
-    background: var(--gold);
-    border-radius: 50%;
-    border: 3px solid var(--dark);
-    box-shadow: 0 0 20px rgba(201,168,76,0.5);
-    flex-shrink: 0;
-    grid-column: 2;
-    grid-row: 1;
-    z-index: 1;
-  }
-
-  .timeline-card {
-    background: var(--dark2);
-    border: 1px solid rgba(201,168,76,0.15);
-    padding: 1.75rem;
-    border-radius: 2px;
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .timeline-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0;
-    width: 3px; height: 100%;
-    background: var(--gold);
-    transform: scaleY(0);
-    transition: transform 0.3s ease;
-    transform-origin: top;
-  }
-
-  .timeline-card:hover::before { transform: scaleY(1); }
-  .timeline-card:hover { border-color: rgba(201,168,76,0.4); box-shadow: 0 10px 40px rgba(0,0,0,0.4); }
-
-  .card-company {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.3rem;
-    font-weight: 600;
-    color: var(--cream);
-    margin-bottom: 0.25rem;
-  }
-
-  .card-role {
-    font-size: 0.75rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 0.25rem;
-  }
-
-  .card-period {
-    font-size: 0.75rem;
-    color: var(--text);
-    opacity: 0.6;
-    margin-bottom: 1rem;
-  }
-
-  .card-desc {
-    font-size: 0.85rem;
-    line-height: 1.7;
-    color: var(--text);
-    opacity: 0.8;
-  }
-
-  .card-location {
-    display: inline-block;
-    margin-top: 0.75rem;
-    font-size: 0.7rem;
-    letter-spacing: 1px;
-    color: var(--gold);
-    opacity: 0.7;
-  }
-
-  /* SKILLS */
-  #skills {
-    padding: 8rem 4rem;
-    max-width: 1200px;
-    margin: 0 auto;
-    flex-direction: column;
-    min-height: auto;
-    background: transparent;
-  }
-
-  .skills-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
-    width: 100%;
-  }
-
-  .skill-category {
-    background: var(--dark2);
-    border: 1px solid rgba(201,168,76,0.12);
-    padding: 2.5rem;
-    border-radius: 2px;
-    position: relative;
-    overflow: hidden;
-    transition: all 0.4s ease;
-    opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.6s ease, transform 0.6s ease, border-color 0.4s ease, box-shadow 0.4s ease;
-  }
-
-  .skill-category.visible { opacity: 1; transform: translateY(0); }
-  .skill-category:hover { border-color: rgba(201,168,76,0.4); box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
-
-  .skill-category-icon {
-    font-size: 2rem;
-    margin-bottom: 1.25rem;
-  }
-
-  .skill-category-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.4rem;
-    color: var(--cream);
-    margin-bottom: 1.5rem;
-  }
-
-  .skill-item {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-  }
-
-  .skill-name {
-    font-size: 0.8rem;
-    letter-spacing: 1px;
-    color: var(--text);
-    display: flex;
-    justify-content: space-between;
-  }
-
-  .skill-bar {
-    height: 2px;
-    background: rgba(255,255,255,0.06);
-    border-radius: 1px;
-    overflow: hidden;
-  }
-
-  .skill-fill {
-    height: 100%;
-    background: linear-gradient(to right, var(--gold), var(--gold-light));
-    border-radius: 1px;
-    width: 0;
-    transition: width 1.5s ease;
-  }
-
-  /* CERTIFICATIONS */
-  #certifications {
-    padding: 8rem 4rem;
-    max-width: 1200px;
-    margin: 0 auto;
-    flex-direction: column;
-    min-height: auto;
-  }
-
-  .certs-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
-    width: 100%;
-  }
-
-  .cert-card {
-    background: var(--dark2);
-    border: 1px solid rgba(201,168,76,0.12);
-    padding: 2rem;
-    display: flex;
-    gap: 1.5rem;
-    align-items: flex-start;
-    transition: all 0.3s ease;
-    opacity: 0;
-    transform: translateX(-20px);
-    transition: opacity 0.5s ease, transform 0.5s ease, border-color 0.3s, box-shadow 0.3s;
-  }
-
-  .cert-card.visible { opacity: 1; transform: translateX(0); }
-  .cert-card:hover { border-color: rgba(201,168,76,0.4); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-
-  .cert-icon {
-    width: 44px; height: 44px;
-    background: rgba(201,168,76,0.1);
-    border: 1px solid rgba(201,168,76,0.3);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.2rem;
-    flex-shrink: 0;
-  }
-
-  .cert-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.1rem;
-    color: var(--cream);
-    margin-bottom: 0.25rem;
-  }
-
-  .cert-issuer {
-    font-size: 0.75rem;
-    color: var(--gold);
-    letter-spacing: 1px;
-    margin-bottom: 0.2rem;
-  }
-
-  .cert-year {
-    font-size: 0.75rem;
-    color: var(--text);
-    opacity: 0.5;
-  }
-
-  /* CONTACT */
-  #contact {
-    padding: 8rem 4rem;
-    flex-direction: column;
-    text-align: center;
-    background: var(--dark2);
-    border-top: 1px solid rgba(201,168,76,0.1);
-  }
-
-  .contact-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(3rem, 7vw, 7rem);
-    font-weight: 300;
-    color: var(--cream);
-    line-height: 1;
-    margin-bottom: 2rem;
-  }
-
-  .contact-title span { color: var(--gold); }
-
-  .contact-links {
-    display: flex;
-    gap: 3rem;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-top: 3rem;
-  }
-
-  .contact-link {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-    text-decoration: none;
-    transition: all 0.3s;
-  }
-
-  .contact-link-icon {
-    width: 56px; height: 56px;
-    border: 1px solid rgba(201,168,76,0.3);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.3rem;
-    transition: all 0.3s;
-    background: transparent;
-  }
-
-  .contact-link:hover .contact-link-icon {
-    background: var(--gold);
-    border-color: var(--gold);
-    transform: translateY(-5px);
-    box-shadow: 0 15px 30px rgba(201,168,76,0.3);
-  }
-
-  .contact-link-label {
-    font-size: 0.7rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--text);
-    opacity: 0.6;
-  }
-
-  .contact-info-text {
-    font-size: 0.9rem;
-    color: var(--text);
-    opacity: 0.7;
-    line-height: 1.9;
-    margin-top: 1rem;
-  }
-
-  /* FOOTER */
-  footer {
-    position: relative; z-index: 10;
-    padding: 2rem 4rem;
-    background: var(--dark);
-    border-top: 1px solid rgba(201,168,76,0.1);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  footer span {
-    font-size: 0.75rem;
-    color: var(--text);
-    opacity: 0.4;
-    letter-spacing: 1px;
-  }
-
-  /* ANIMATIONS */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  @keyframes fadeIn {
-    to { opacity: 1; }
-  }
-
-  @keyframes scrollPulse {
-    0%, 100% { transform: scaleY(1); opacity: 1; }
-    50% { transform: scaleY(0.6); opacity: 0.4; }
-  }
-
-  @keyframes float3d {
-    0%, 100% { transform: translateY(0) rotateX(2deg) rotateY(2deg); }
-    33% { transform: translateY(-15px) rotateX(-2deg) rotateY(4deg); }
-    66% { transform: translateY(-8px) rotateX(4deg) rotateY(-2deg); }
-  }
-
-  @keyframes spin {
-    to { transform: translate(-50%,-50%) rotate(360deg); }
-  }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.4; }
-  }
-
-  /* RESPONSIVE */
-  @media (max-width: 900px) {
-    nav { padding: 1.2rem 1.5rem; }
-    .nav-links { gap: 1.2rem; }
-    #about { grid-template-columns: 1fr; gap: 3rem; padding: 5rem 1.5rem; }
-    .about-visual { height: 300px; }
-    #experience { padding: 5rem 1.5rem; }
-    .timeline::before { left: 16px; }
-    .timeline-item { grid-template-columns: auto 1fr; gap: 1rem; }
-    .timeline-item:nth-child(odd) .timeline-card,
-    .timeline-item:nth-child(even) .timeline-card { grid-column: 2; text-align: left; }
-    .timeline-item:nth-child(odd) .timeline-empty,
-    .timeline-item:nth-child(even) .timeline-empty { display: none; }
-    .timeline-dot { grid-column: 1; }
-    .skills-grid { grid-template-columns: 1fr; padding: 0 1.5rem; }
-    .certs-grid { grid-template-columns: 1fr; padding: 0 1.5rem; }
-    #skills, #certifications { padding: 5rem 1.5rem; }
-    #contact { padding: 5rem 1.5rem; }
-    footer { padding: 1.5rem; flex-direction: column; gap: 0.5rem; text-align: center; }
-    .stats-strip { gap: 2rem; padding: 2rem; }
-  }
-</style>
-</head>
-<body>
-
-<!-- Custom Cursor -->
-<div class="cursor" id="cursor"></div>
-<div class="cursor-ring" id="cursorRing"></div>
-
-<!-- 3D Background Canvas -->
-<canvas id="bg-canvas"></canvas>
-
-<!-- Navigation -->
-<nav>
-  <div class="nav-logo">T.Verma</div>
-  <ul class="nav-links">
-    <li><a href="#about">About</a></li>
-    <li><a href="#experience">Experience</a></li>
-    <li><a href="#skills">Skills</a></li>
-    <li><a href="#certifications">Certs</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
-</nav>
-
-<!-- HERO -->
-<section id="hero">
-  <p class="hero-eyebrow">Account & Billing Executive · Mahe, Seychelles</p>
-  <h1 class="hero-name">
-    Tajender<span>Verma</span>
-  </h1>
-  <p class="hero-title">Financial Operations · O2C · AR/AP · GST Compliance</p>
-  <a href="#contact" class="hero-cta">Let's Connect</a>
-  <div class="scroll-indicator">
-    <span>Scroll</span>
-    <div class="scroll-line"></div>
-  </div>
-</section>
-
-<!-- STATS STRIP -->
-<div class="stats-strip">
-  <div class="stat-item">
-    <div class="stat-number">7+</div>
-    <div class="stat-label">Years Experience</div>
-  </div>
-  <div class="stat-item">
-    <div class="stat-number">4</div>
-    <div class="stat-label">Companies</div>
-  </div>
-  <div class="stat-item">
-    <div class="stat-number">O2C</div>
-    <div class="stat-label">Full Cycle</div>
-  </div>
-  <div class="stat-item">
-    <div class="stat-number">AI</div>
-    <div class="stat-label">Enabled Workflows</div>
-  </div>
-</div>
-
-<!-- ABOUT -->
-<section id="about" style="min-height:auto; display:block; padding:8rem 4rem;">
-  <div style="max-width:1200px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:6rem; align-items:center;">
-    <div class="about-visual">
-      <div class="about-card-3d">
-        <div class="deco-ring ring1"></div>
-        <div class="deco-ring ring2"></div>
-        <div class="profile-frame">
-          <div class="profile-initials">TV</div>
-        </div>
-        <div class="profile-badge badge-top">India · Seychelles</div>
-        <div class="profile-badge badge-bottom">DOB: 15 Sep 1999</div>
-      </div>
-    </div>
-    <div class="about-content">
-      <h2>Detail-Oriented <em>Financial</em> Professional</h2>
-      <p>With over 7 years of hands-on experience in financial operations, billing, and team supervision across the logistics and food industries, I bring precision and efficiency to every financial process I manage.</p>
-      <p>Expert in the full Order-to-Cash (O2C) cycle, Accounts Receivable (AR), and Accounts Payable (AP), with a proven ability to optimize workflows using AI Prompt Engineering and advanced Excel.</p>
-      <div class="contact-row">
-        <div class="contact-item">
-          <div class="contact-dot"></div>
-          <span>📍 Mahe, Seychelles · Nationality: Indian</span>
-        </div>
-        <div class="contact-item">
-          <div class="contact-dot"></div>
-          <span>📞 +91 97841 42791</span>
-        </div>
-        <div class="contact-item">
-          <div class="contact-dot"></div>
-          <span>✉️ Tejender978@gmail.com</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- EXPERIENCE -->
-<section id="experience" style="min-height:auto; display:block; padding:8rem 4rem;">
-  <div style="max-width:1100px; margin:0 auto;">
-    <div class="section-header">
-      <p class="section-eyebrow">Career Journey</p>
-      <h2 class="section-title">Work Experience</h2>
-    </div>
-    <div class="timeline">
-
-      <div class="timeline-item">
-        <div class="timeline-card">
-          <div class="card-company">International Food Solution Pty Ltd</div>
-          <div class="card-role">Account & Billing Executive</div>
-          <div class="card-period">Feb 2025 – Present</div>
-          <p class="card-desc">Managed full O2C cycle including sales orders, invoicing, and AR resolution. Implemented AI Prompt Engineering for workflow automation. Supported month-end closing with AR, AP, and Petty Cash reconciliations.</p>
-          <span class="card-location">📍 Mahe, Seychelles</span>
-        </div>
-        <div class="timeline-dot"></div>
-        <div class="timeline-empty"></div>
-      </div>
-
-      <div class="timeline-item">
-        <div class="timeline-empty"></div>
-        <div class="timeline-dot"></div>
-        <div class="timeline-card">
-          <div class="card-company">CJ DARCL Logistics Ltd</div>
-          <div class="card-role">Account Assistant</div>
-          <div class="card-period">Nov 2024 – Feb 2025</div>
-          <p class="card-desc">Prepared vouchers, cash & bank statements. Managed end-to-end reconciliation of cash books, sundry debtors, and GST 2B. Executed TDS calculations and supported GST return filing.</p>
-          <span class="card-location">📍 Panipat, Haryana, India</span>
-        </div>
-      </div>
-
-      <div class="timeline-item">
-        <div class="timeline-card">
-          <div class="card-company">Associated Road Carriers Ltd</div>
-          <div class="card-role">Cashier</div>
-          <div class="card-period">Sep 2023 – Nov 2024</div>
-          <p class="card-desc">Handled cash & bank accounts with reconciliations. Conducted branch audits, issued money receipts, and negotiated vendor rates for logistics operations.</p>
-          <span class="card-location">📍 Kundli, Haryana, India</span>
-        </div>
-        <div class="timeline-dot"></div>
-        <div class="timeline-empty"></div>
-      </div>
-
-      <div class="timeline-item">
-        <div class="timeline-empty"></div>
-        <div class="timeline-dot"></div>
-        <div class="timeline-card">
-          <div class="card-company">TCI Express Ltd</div>
-          <div class="card-role">Account Supervisor</div>
-          <div class="card-period">Oct 2018 – Sep 2023</div>
-          <p class="card-desc">Prepared monthly Business Score Cards and Reports. Led branch functions including cash handling, billing, and EDP work. Managed party ledgers, bank reconciliations, and a full team.</p>
-          <span class="card-location">📍 Lucknow, Uttar Pradesh, India</span>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- SKILLS -->
-<section id="skills" style="min-height:auto; display:block; padding:8rem 4rem;">
-  <div style="max-width:1100px; margin:0 auto;">
-    <div class="section-header">
-      <p class="section-eyebrow">Expertise</p>
-      <h2 class="section-title">Skills & Tools</h2>
-    </div>
-    <div class="skills-grid">
-      <div class="skill-category">
-        <div class="skill-category-icon">💼</div>
-        <div class="skill-category-title">Finance & Accounting</div>
-        <div class="skill-item">
-          <div class="skill-name"><span>Tally Prime</span><span>95%</span></div>
-          <div class="skill-bar"><div class="skill-fill" data-width="95"></div></div>
-        </div>
-        <div class="skill-item">
-          <div class="skill-name"><span>Bank Reconciliation (BRS)</span><span>95%</span></div>
-          <div class="skill-bar"><div class="skill-fill" data-width="95"></div></div>
-        </div>
-        <div class="skill-item">
-          <div class="skill-name"><span>GST 2B Reconciliation</span><span>90%</span></div>
-          <div class="skill-bar"><div class="skill-fill" data-width="90"></div></div>
-        </div>
-        <div class="skill-item">
-          <div class="skill-name"><span>TDS Calculations</span><span>90%</span></div>
-          <div class="skill-bar"><div class="skill-fill" data-width="90"></div></div>
-        </div>
-        <div class="skill-item">
-          <div class="skill-name"><span>AR / AP / O2C Cycle</span><span>95%</span></div>
-          <div class="skill-bar"><div class="skill-fill" data-width="95"></div></div>
-        </div>
-      </div>
-
-      <div class="skill-category">
-        <div class="skill-category-icon">💻</div>
-        <div class="skill-category-title">Technical & IT</div>
-        <div class="skill-item">
-          <div class="skill-name"><span>Advanced Excel</span><span>90%</span></div>
-          <div class="skill-bar"><div class="skill-fill" data-width="90"></div></div>
-        </div>
-        <div class="skill-item">
-          <div class="skill-name"><span>Power BI</span><span>75%</span></div>
-          <div class="skill-bar"><div class="skill-fill" data-width="75"></div></div>
-        </div>
-        <div class="skill-item">
-          <div class="skill-name"><span>AI Prompt Engineering</span><span>85%</span></div>
-          <div class="skill-bar"><div class="skill-fill" data-width="85"></div></div>
-        </div>
-        <div class="skill-item">
-          <div class="skill-name"><span>ERP / Orion</span><span>80%</span></div>
-          <div class="skill-bar"><div class="skill-fill" data-width="80"></div></div>
-        </div>
-        <div class="skill-item">
-          <div class="skill-name"><span>RS-CIT (IT Certificate)</span><span>88%</span></div>
-          <div class="skill-bar"><div class="skill-fill" data-width="88"></div></div>
-        </div>
-      </div>
-
-      <div class="skill-category">
-        <div class="skill-category-icon">🎯</div>
-        <div class="skill-category-title">Operations & Management</div>
-        <div class="skill-item">
-          <div class="skill-name"><span>Team Leadership</span><span>88%</span></div>
-          <div class="skill-bar"><div class="skill-fill" data-width="88"></div></div>
-        </div>
-        <div class="skill-item">
-          <div class="skill-name"><span>Vendor Management</span><span>90%</span></div>
-          <div class="skill-bar"><div class="skill-fill" data-width="90"></div></div>
-        </div>
-        <div class="skill-item">
-          <div class="skill-name"><span>Inventory Management</span><span>82%</span></div>
-          <div class="skill-bar"><div class="skill-fill" data-width="82"></div></div>
-        </div>
-        <div class="skill-item">
-          <div class="skill-name"><span>Customer Relations (CRM)</span><span>85%</span></div>
-          <div class="skill-bar"><div class="skill-fill" data-width="85"></div></div>
-        </div>
-        <div class="skill-item">
-          <div class="skill-name"><span>Branch Audits</span><span>88%</span></div>
-          <div class="skill-bar"><div class="skill-fill" data-width="88"></div></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CERTIFICATIONS -->
-<section id="certifications" style="min-height:auto; display:block; padding:8rem 4rem;">
-  <div style="max-width:1100px; margin:0 auto;">
-    <div class="section-header">
-      <p class="section-eyebrow">Qualifications</p>
-      <h2 class="section-title">Education & Certifications</h2>
-    </div>
-    <div class="certs-grid">
-      <div class="cert-card">
-        <div class="cert-icon">🎓</div>
-        <div>
-          <div class="cert-title">B.Com — Bachelor of Commerce</div>
-          <div class="cert-issuer">OPJS University</div>
-          <div class="cert-year">2017 – 2019</div>
-        </div>
-      </div>
-      <div class="cert-card">
-        <div class="cert-icon">📊</div>
-        <div>
-          <div class="cert-title">Advanced Excel Certification</div>
-          <div class="cert-issuer">STP Computer Education · Ministry of MSME</div>
-          <div class="cert-year">2024</div>
-        </div>
-      </div>
-      <div class="cert-card">
-        <div class="cert-icon">🤖</div>
-        <div>
-          <div class="cert-title">AI Tools Workshop</div>
-          <div class="cert-issuer">Be10x</div>
-          <div class="cert-year">Nov 2025</div>
-        </div>
-      </div>
-      <div class="cert-card">
-        <div class="cert-icon">💹</div>
-        <div>
-          <div class="cert-title">Tally Prime Certification</div>
-          <div class="cert-issuer">STP Computer Education · Ministry of MSME</div>
-          <div class="cert-year">2024</div>
-        </div>
-      </div>
-      <div class="cert-card">
-        <div class="cert-icon">💻</div>
-        <div>
-          <div class="cert-title">RS-CIT</div>
-          <div class="cert-issuer">Vardhman Mahaveer Open University · Rajasthan</div>
-          <div class="cert-year">2016 – 2017</div>
-        </div>
-      </div>
-      <div class="cert-card">
-        <div class="cert-icon">📚</div>
-        <div>
-          <div class="cert-title">12th Standard · RBSC Board</div>
-          <div class="cert-issuer">Rajasthan Board of Secondary Education, Ajmer</div>
-          <div class="cert-year">2017</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CONTACT -->
-<section id="contact">
-  <div style="max-width:800px;">
-    <p class="section-eyebrow" style="margin-bottom:1.5rem;">Get In Touch</p>
-    <h2 class="contact-title">Let's <span>Work</span> Together</h2>
-    <p class="contact-info-text">
-      Open to new opportunities in Finance, Accounting & Billing Management.<br>
-      Currently based in Mahe, Seychelles.
-    </p>
-    <div class="contact-links">
-      <a class="contact-link" href="mailto:Tejender978@gmail.com">
-        <div class="contact-link-icon">✉️</div>
-        <span class="contact-link-label">Email</span>
-      </a>
-      <a class="contact-link" href="tel:+919784142791">
-        <div class="contact-link-icon">📞</div>
-        <span class="contact-link-label">Phone</span>
-      </a>
-      <a class="contact-link" href="#">
-        <div class="contact-link-icon">💼</div>
-        <span class="contact-link-label">LinkedIn</span>
-      </a>
-    </div>
-    <div style="margin-top:3rem; padding:1.5rem; border:1px solid rgba(201,168,76,0.2); background:rgba(201,168,76,0.04);">
-      <p style="font-size:0.85rem; color:var(--text); opacity:0.7; line-height:1.8;">
-        📧 Tejender978@gmail.com &nbsp;|&nbsp; 📞 +91 97841 42791 &nbsp;|&nbsp; 📍 Mahe, Seychelles
-      </p>
-    </div>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer>
-  <span>© 2025 Tajender Verma. All Rights Reserved.</span>
-  <span>Account & Billing Executive · Mahe, Seychelles</span>
-</footer>
-
+:root{--void:#02030a;--ink:#e9f1ff;--mute:#8da2c8;--blue:#4cc3ff;--gold:#ffd25e;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px);background:var(--void)}
+body{margin:0;background:var(--void);color:var(--ink);font-family:"Space Grotesk",system-ui,-apple-system,"Segoe UI",sans-serif}
+#c{position:fixed;inset:0;width:100%;height:100%;display:block}
+#sc{height:560vh}
+.pn{position:fixed;left:50%;transform:translateX(-50%);width:min(92vw,760px);text-align:center;opacity:0;pointer-events:none}
+h1{margin:.15em 0 .1em;font-size:clamp(30px,6.2vw,64px);font-weight:700;letter-spacing:.04em;text-shadow:0 0 28px rgba(76,195,255,.55)}
+.k{font:500 11px/1.4 ui-monospace,Menlo,monospace;letter-spacing:.28em;text-transform:uppercase;color:var(--blue)}
+.s{color:var(--mute);font-size:clamp(13px,1.6vw,16px);margin:.35em 0;line-height:1.5}
+#av{width:64px;height:64px;border-radius:50%;margin:0 auto 10px;overflow:hidden;border:1.5px solid var(--gold);box-shadow:0 0 22px rgba(255,210,94,.45);display:grid;place-items:center;background:#0b1430;font-weight:700;color:var(--gold)}
+#av img{width:100%;height:100%;object-fit:cover;display:block}
+.lb{position:fixed;left:0;top:0;pointer-events:none;opacity:0;will-change:transform;text-align:center;padding:7px 11px;border-radius:12px;background:rgba(18,30,64,.4);border:1px solid rgba(160,200,255,.22);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);max-width:190px;line-height:1.3}
+.lb b{display:block;font-size:13px;font-weight:700}
+.lb span{display:block;font-size:12px;color:var(--mute)}
+.lb i{display:block;font:normal 500 11px ui-monospace,Menlo,monospace;letter-spacing:.06em;color:var(--c,var(--blue));margin-top:2px}
+.lb.big{background:none;border:0;backdrop-filter:none;-webkit-backdrop-filter:none;max-width:none}
+.lb.big b{font-size:clamp(15px,2.4vw,22px);letter-spacing:.12em;text-transform:uppercase;text-shadow:0 0 14px rgba(0,0,0,.7)}
+.lb.big span{color:#cfe0ff}
+.ct a{display:inline-block;margin:6px 8px;padding:10px 18px;border-radius:999px;border:1px solid rgba(160,200,255,.3);background:rgba(18,30,64,.45);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);text-decoration:none;color:var(--ink);font-size:14px}
+#bar{position:fixed;left:0;bottom:env(safe-area-inset-bottom,0px);height:2px;width:0;background:linear-gradient(90deg,var(--gold),var(--blue))}
+#hint{position:fixed;left:0;right:0;bottom:calc(env(safe-area-inset-bottom,0px) + 22px);text-align:center}
+.doc{position:relative;z-index:3;background:linear-gradient(180deg,rgba(2,3,10,0),#02030a 240px);padding:clamp(120px,22vh,220px) 0 calc(40px + env(safe-area-inset-bottom,0px))}
+.wrap{width:min(1080px,92vw);margin:0 auto}
+.doc section{margin:0 0 76px}
+.doc h2{font-size:clamp(24px,3.2vw,34px);line-height:1.25;font-weight:700;margin:0 0 14px;max-width:24em}
+.eb{font:500 11px/1.4 ui-monospace,Menlo,monospace;letter-spacing:.26em;text-transform:uppercase;color:var(--blue);margin:0 0 10px}
+.lead{font-size:clamp(16px,1.9vw,19px);line-height:1.75;color:#cfe0ff;max-width:68ch;margin:0}
+.kp,.jobs,.sk,.cr{display:grid;gap:14px}
+.kp{grid-template-columns:repeat(auto-fit,minmax(160px,1fr));margin-top:28px}
+.sk{grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}
+.cr{grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+.kp>div,.job,.sk>div,.cr>div{border-radius:16px;background:rgba(18,30,64,.42);border:1px solid rgba(160,200,255,.16)}
+.kp>div{padding:16px 18px}.kp b{display:block;font-size:32px;line-height:1.1;color:var(--gold)}.kp span{font-size:13px;color:var(--mute)}
+.job{padding:22px 24px;box-shadow:inset 3px 0 0 var(--c,var(--gold))}
+.job h3{margin:0;font-size:19px}
+.job .m{font:500 12px/1.5 ui-monospace,Menlo,monospace;letter-spacing:.05em;color:var(--c,var(--gold));margin:5px 0 12px}
+.job ul{margin:0;padding-left:18px;color:#cfe0ff;line-height:1.65;font-size:15px}.job li{margin:5px 0}
+.sk>div{padding:20px}.sk h3{margin:0 0 12px;font-size:15px;color:var(--gold)}
+.ch{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}
+.ch li{padding:6px 12px;border-radius:999px;font-size:13px;background:rgba(76,195,255,.1);border:1px solid rgba(76,195,255,.28);color:#d8e8ff}
+.cr>div{padding:16px 18px}.cr b{display:block;font-size:15px;line-height:1.35}.cr span{display:block;font-size:13px;color:var(--mute);margin-top:4px}.cr i{display:inline-block;margin-top:10px;font:500 11px ui-monospace,Menlo,monospace;letter-spacing:.08em;color:var(--blue)}
+.doc a{color:var(--gold)}.doc a:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+.ft{text-align:center;color:var(--mute);font-size:13px;border-top:1px solid rgba(160,200,255,.14);padding-top:24px}.ft p{margin:6px 0}
+</style></head><body>
+<canvas id="c"></canvas><div id="lb"></div>
+<div class="pn" id="p0" style="top:calc(env(safe-area-inset-top,0px) + clamp(18px,5vh,48px))"><div id="av"><img id="avi" alt="Portrait of Tejender Verma" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBAUEBAYFBQUGBgYHCQ4JCQgICRINDQoOFRIWFhUSFBQXGiEcFxgfGRQUHScdHyIjJSUlFhwpLCgkKyEkJST/2wBDAQYGBgkICREJCREkGBQYJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCT/wAARCACwALADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD6pooooAKKKKACiiigAooooAKKCQOTxVWbVLK3yJLqJSOSN2SKALVFUDrdnkBWd8jIKrkEVJFq1lK20XEYbptY7T+RpcyHyst0UAhgCCCD6UUxBRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAVna7qv9k6fNOi75FUlVq5c3CWsDzOeFH515VqXjaXX9QNpYvsfJzIOQg3ADI9eelROVjSnDmZqwazcarDujuZrtZ34YpxGuBnp+OO1c1q6a8Jbt7C5MdhbMI9iru8xiecn72V/yKWbU76G6EGmahBb3EQWKaSVCY2cDkbQOSBzjjGQKxdcdbEP5uvvHn9680aORx1ZsDA/PNcjqq+p2qk7aIwtW8b+KNNgDSQNapaqHlV2BZh13EjBzg+g/wAGy/EO91W9fyoXWS1gM5niQssqAKCT0IwT3B71xuv+JI5PNu01OS8D4xKYtokOSBt5z2NcjJ4hvEfdbStA4TyzyQdvZc+nWtlFTRm26bPd/DnxnvrQqv8AaVo0ZPSRcjHTjB5r1Hwz8V9L1Zkt9TMdhO/+rmLZgm/3WPQ+xr4h+3yIWSaQMV4Dg849/Wuo8K+NJtJLQs4lhfopbIH4Hp9KpQlT2dyHKFTdWZ94AhgCCCDyCO9FfOvwx+OyWl7FpeqOW05sKrdTbn+ZX2/KvoiGaO4iSaF1kjdQyupyGB6EGtUzmasOooopiCiiigAooooAKKKKACiiigAooooA82+LPxBt/DVs1mHAmcKg/wB5v8Bz+Nee6Oy6D4dXWblHUXspHmvkjCIxGeMgFmBz6j3rz343a62s+J5XeRkVNTmjPzYACEAdPY0sfiTxB4r8K2+giTy1tQYy45dlzwp+lYO7TZ1RVrIjt/H1ykNxPA8hVpWd2yfmPoPb1/CsDWPidq2osUFrAqg4KBWwy+hGea2dA8F6pZgw3ts0ajOF/rXT2/gW0AEhthk8kkc1zylCL2ud8KU5Lex5RqnjbWL8kyRJHFt27FUqi/RegrCm1q8eF4i7MjHccjj8+tfQEngWzlgKGBeR/drnNV+Ftg6M0du8Z/6Z+v0qoV4LRoipgqktVI8WWVnOSSw7jFWYnHmr8zRg+9dpffDG7gY+TKdvbctULzwNqWm2rXiFZzGMlNpHFdCrwZxywlSOthtzPptpp1i9rdTtfneZQVwijjbtNfQf7OXxTN3BF4W1WVt7lvsbuejDkx/iOR+I9K+XI7hJjtuW2Z6kgk/hW14X1m40vxBpNzaT7XgvI5Exwchgcn64xVeZnurM/QmiiirMQooooAKKKKACiiigAooooAKKKKAPjH4p2lvo3xH1rS9ShZ7SS8afAOGRZBuDA/Rv0rV+FPh5vtV9dW013eW2QsbSxhfwyCQfqPavQP2kfBMFxNZeJ44WaTb9mnI6YGSpP5kfhVbwjc/2R8Kbb7MfKuJ0dUYrk5LsCfyGB6VhNWVjsou7uUPGfj/w74c/0drpJ7lOGjhXdz6ZFcBF8brh7oAabGIM4AJO7FUJPBOnwSNJqt2BIzFtu7k/hVa50TQoG8pZ3/eH5GKkFfxxWLq0trXOuNGvvex6v4Z8c2HiXTluYY2jYEq6HqpFcl4g+LCxzSrZIpRGKZxnP+cH9Kh8L2K6PayQWhyrfMWz1JrJ1Pwxp9jPNdXMg8uVvM8sZ4b6+lYqcE7s6JKpKKS36lEfFa+e4P2qBGTPQcGuk0jxzpOtOto2YJX4Afo30rBsYPDUspFzb+ZK397GAPYZrQi8DaPqUh/syYQzINwjKkEe/PNaOrTkrNWMI0q0XdSuYPxB8FDSQb+3T/R5GByOik9qxvAWmPrPjbRNNiAZ572FMH03DP6Zr1TVI3vvBuoWV0N09vAc/VeQf0rO/Zn0WLUfijbTyxhxY20tyuR0bAUH/wAerbDyck0+hyYqCjJSXU+xqKKK6TiCiiigAooooAKKKKACiiigAooooA8u+JvjPSbyz1Tw1c20pkjxtlOCu8YYe/tWFP4auG8JaNHa7UCw7gT0GSST+tYviYKfEOqQ3AJmmv3QZ9N3/wBcflXp2qXEWmaNFa4X93GqKD24rzIV5VOZT7nu1cLCi4Ol1X42PnrxF4EnE0hOoPP5oYOmwqAT0IKnJx78VzcPgV7cPEjszyFcSBTuTHYZPfPevdJtP+1lppI1iT36n8KbY6bYRzfKF54z3zRzSWi2NfZxer3Mfwb4POn+HhJdnMrEhfpXHeLPDc1/ctHG8m0cEJ1xXu2q2tvbabBbrMqEpkKRyK89u1MOoOjkZB6j+IVM1y2Lpy50zyt/ASXrx+Y3lBIxCcRD5lznJ45PPWui0rwl/Z8/nQ3c5GdyxYARD/sjsPYV25tUlIk2D6DvUkcKQ/MqL7+op3b3egeyindLUxZrQvDNHKq7pomjIx1yMVy3wjvdU8FajeaxaiJDNbi3xIm7I3An6cgV2t580qye+Metc3a3EUazWZyPLZoyT/vGpdV04vkIWHjVqLn6H0p4O8Sx+K/D9vqaKEd8pKg/hccEf59a2688+B1lLa+EJnlPEt5Iyj0AwP5ivQ69GjJygnLc8TEwjCrKMdkwooorUwCiiigAooooAKKKKACiiigDxL4kaTLB48S8hiMifLcSKP7vG4/pWn4mvBPeQsshcCNWVR3JH8q3/iTDFKEhSNUubiIp5zHAEYOWAPT04rzC/wDEKQm38993Hkgj0HqPwrzZwtKVj2aVVuMOboaVxqDlP3kjZ/u1Ta+udJhbVorQXRgBZYyf4scHHtXLeJPF8Wj2ElyCJJC21E965CPxB4j8RJJGbw2dk42g/wAWPYUoU21zSeh0TxCXuRV2d1YfE6PVPOm1QC2ukJLL5ocED09Ppis+z8dT+ItQkgTTII7fpFIJ9zj0ZhjA/OuHT4fpHO07apcAyZz8oPBHPel/4QFbE+dYarPG395h/hQqVNNvmG61ay909kiuGCjdgYpJrgFQ+WO7rgdK8dt/GfiDw/frFey/a7fuc5yPrXfnxJH9kFwm75lDD0OampTcdtmaU8TGSaejRtXUqRqEznHWuRO28ubi4QkQJM29z/FknAHrVfU/ED3Np5gbCjjH0PrWh4PtLjVhb2ltCZ7i4OAgGec9fpScPd1M1W99tdj6N+GVs1t4J00OpVpFaXB9GYkfpiuoqvptoLDTrW0AAEESR8dOABVivUirJI8CpLmk5dwoooqiAooooAKKKKACiiigAooooAqappFhrVsbbULWO5hzna46H1B6g/Svl74waI/hnxbNp0AMdo+Lq2yT909Rk9cEEV9WV5p8d/As3izwqb7T49+paZmVFA5kj/iUe/GR9PeonG+prTm4u3Q+XvEWo79HSU4Z43+XPf3qnoV3YN/pepmRw3G0OQo9sCsfVppWtDydrNjbjgf/AF6o6UX3tuwydMH19qz9j7p0RxDUz0o634MnjCySW0ZHVd7r+lVLjUPDtzmCxOT3MRb+ZrgbjQUk/fNMygt0PUfhVyKBNLhMkLu5Pb1qPZrozq+uSejWhc1q3jtJYWtG2Bj8yEknr39a6RL+M2CWkJBLDCnOPzrzq6u5biQOzsee5rW0q9kEHUFowWGTTlS91GEMQnNnY6VpM2s63p2g2n7yW9dIyR/CT1P4dfwr7R0zRdP0iGOKzs7eEpGse9I1VmAGBkgc14F+zD4VTULq68V3Sbmth9mt89nYZYj6Dj/gRr6LrSlGy1OavPmloFFFFamAUUUUAFFFFABRRRQAUUUUAFFFFABUdxNHbwPLMwWNFJYn0p7MqKWYhVAySTwK8k8d+PDqfiKz0PTZP9FRJp5nB/1mxcD8NzDFJuxUY3Z88/Ffw4bDxDez2cebN5jJGAeFDc4A9Oa89S68h8JgYcHPrxXtRvrbxfoVozYM8cYgnXvvT5Tn8s/jXnmu+C2hkbySYzk8EZGP6VhGuvhkdU8NL4oHPXWph5PlPA9OlNuNQQqu1ztHbPNSSeG7yAMDCznPGylHhq9Y7fKII6kninzw7k+zqvoZ7SiRtoAAx1xWz4c0ubU7xLdAwjON79sVZ0/wkzsBMWLd1QcCu80jSotMtgzALtHAFZVcQkrRNqOEk3zTPX/gv438PeG3XwVcyfZLu5lElqzfclLLgJns3y8Z6/Wvbq/PHXNdk1DVtQv4pGT7M8flMpxjYQMj8zX1l8EPjRD4506PStZmjj1qJQquTgXS46j/AGvUd+o9K64RagjiqtObseuUUUUyAooooAKKKKACiiigAoqhe67p1gD510m4fwr8x/SuX1j4jxWwK2sYU9nl6/l/9eldFKLZ20jpGhZ2VVHUscAVz2qeOtI00EJKbmTssXQn6nivKfEPj6aZWlurpmx/AW4B9AK56x1C4v7hbi5JWOXmOM8EL6n1z/L61PM+hSh3O68UePrrWW+wpi2gxuZVP3/YmvMtG1MXPjnVgeWtNPRFHf55Mn/0EVqai+2Tzw3GMDB6Vxnw/vI77x34pljHBhixn2bH9aEupeidkZll5nhjxNfW0jH7PeyNcRk9ASef1rpphDdQ5YKwI61V8d6HNIItTSNhLCNxAGcr0P8AL9Kz9NvFuYBh8Ej161wYmNnc9PCSvGxM2nKjcN8uc9M04afC53HHr6CpV8zOCoYdjnmpt7r/AAD6k1wtu53pIbFbRQDeFAb1Nc/4s1o2lnIsbYbaQTWtfXOyMtJKMj+Fa868UX/2ydIEPyk5I9q6sNT5pI5cVV5IMyY8ppd3Ix+/Gc++a0tA1OawENxBK0cqYKupwQapXSeVotwvqoH60zS3X7Mg74r3UraHzjZ9NfDn48a29gsWqmK/2Hbvk+V+PVh1+pFesaR8VPD+pYWeR7KQ/wDPUZT/AL6H9cV8a+H9Z/s2Qx8bJGGSex/wruxeS2x80MFU84H9KxmrM2haSPry2ure8iEttPHNGejRsGH6VLXynpPjq+0qfzbe4likBxlGIyP8+tei6D8bbvCpeLBdqOC33G/McfpUg4ns9Fclo/xP8P6rhZJ2s5D2mHy/99Dj88V1cUsc8ayRSJIjDIZTkH8aZNjm9Q8cWkBZLWPziv8AEx2r/jXGa547uLhSHuiqd0j4WvMrzxsHRt0gJLcDd1rB1PxQdxDtyeeTips2a+6jstU8bNhtg2ryeuK5m68QzXB+Y/KcfP0FZFvO10DK2Si5OPU5/wD1Vi65q5YvBCcADBIPAPtTjHoJyNiLUf7S1BZmje7ht2BEMb7fMHfk10+h63H4huJr6JoUhRSpAIxFjqp9CPSuN8GiW4RkVCxPVv6n0rOWys/DmoXUVtdm6uJI3Z9jYhHPAYfxN79P503HWw1K2p2us63E6yRwyBIgDul7n2X/AB/L24bwhr8Hg6HxXr8sXn4EMEEJJ/eSOzkAnrj5cn2BrUQie086V3diMkluPrz3rzvxDqRFrfaaq8T3UM+fZFkH/s9NLSxLl1IpviD4ivtYTUbvUppWViRDuKxKp6qFHAGPxr0Xwz9j1mIS6fI524WaJ8bo3xz06g84PcV40ITjPpXR+CvFl54P1Q3lrHFcJIhimt5s7JUODg45BBAII6EVnWpKcbGmHrunK7PYn0yWPAVjioXtrhcjnHtWvoWox6xpFpfMqq88SsVU5CtjkZ+tVPEmv2PhnT2ubzLMx2xRL96RsdPp6mvI9k726ntuqlHmvoY15od3eERQoWYjJ5wFHcknoB3J4FebeK7/AE+1vyNPl8/yoxEr44duSz+wyeO+AKtax8TPEGoWN5pyXEdrYXZ/eQxRqCy8YUvjcRxnGeua44RtISzfrXq0KPs15njYnEe0dlsa1tqEl7pN1HNgyRgEMB1HvUljlYE7ECsq1m+zO4YHZIhRsfofzrXtxiBR7V1pnGX4J1ORIPxq3a+K7y3kW1ik3QbgHyM7F9vesoCnQRpjCAIR27Gm1cFpsdVJrLAqQ2T2IrRttRZIw4mC+3rXH2cjCYRup69DWw9ykduoXBwf4sYqHEtSOsg8S+UFbdx6A810vh74o3eiv/omoywL/czlW/DpXi9xqEnmHDZwePT8Kj+3Pyd3Wn7NBzls6jJIw+Y4ByKbcX7STZDHt1PNUbVw43DvSFiHqkSddY64IrJYOrvgccn8KydSusyYUgCs+2ZpZd2ThBnr0pGbznxn2FJR1G2djFPLH4SiSGQwI7MXCcb/AHJ7/wBKytMiAMhIJJHU1ZkZrXRoIyqjnIYdScCqitsjDgqC3YjvUobNmKQG3IAATlQD06V5xry7tRbP0/Wu8gn327bm3Arjbg8H1rh9VHmX7Nx36dOtCQMqQwDniq80BibI+6elaMQwwBpJYwylTRYSZteB/GMvh68W2unLafKcHP8AyzP94f1qz8RddGraqkSkNFaJsGOhY8k/yH4VyiwhlKMPunND5kyTWXs1zcxr7aXJydCq2ZGJI4FSLHhMkcmnCPkCpmTAArVIyuUpEHpitmIYQD2rNdPmrTQfLTQmO3AdRj3pcZINGOKVQAeKsQ5JSLgcn5cDrUt1MXbk5xxVQcu5x3xTmYsKXmCGM2TSbsU3pSHkZzU3Ksf/2Q=="></div><div class="k">Kinetic data portfolio</div><h1>Tejender Verma</h1><p class="s">Senior Accountant · O2C · AR · AP · MIS reporting<br>Odoo ERP · Tally · Power BI · Excel VBA</p></div>
+<div class="pn" id="p1" style="top:calc(env(safe-area-inset-top,0px) + clamp(18px,5vh,48px))"><div class="k">Career timeline</div><p class="s">India → Seychelles → Mali · 2018 to today</p></div>
+<div class="pn" id="p2" style="top:calc(env(safe-area-inset-top,0px) + clamp(18px,5vh,48px))"><div class="k">Selected builds</div><p class="s">Excel, VBA and automation tools · dashboard views are illustrative</p></div>
+<div class="pn ct" id="p3" style="bottom:calc(env(safe-area-inset-bottom,0px) + 9vh)"><div class="k">Let’s connect</div><p><a href="mailto:tejender978@gmail.com">tejender978@gmail.com</a><a href="https://www.linkedin.com/in/tejender-verma-252281117/" target="_blank" rel="noopener">LinkedIn profile</a></p></div>
+<div id="hint" class="k">Scroll to move the camera</div><div id="bar"></div>
+<div id="sc"></div>
+<main class="doc"><div class="wrap">
+<section id="profile"><p class="eb">Executive profile</p><h2>Senior Accountant who builds the systems behind the numbers</h2>
+<p class="lead">Senior Accountant with 8+ years across logistics and food &amp; beverage, now running full-cycle accounting, product costing and stock-variance control at TCsons Food &amp; Beverage in Bamako. Pairs hands-on finance (O2C, AR/AP, reconciliations, statutory tax compliance) with Odoo ERP, Excel VBA, Power BI and AI-assisted workflows, and builds the small tools that keep data entry and reporting clean. Experience spans India, Seychelles and Mali.</p>
+<div class="kp"><div><b>8+</b><span>Years of professional experience</span></div><div><b>3</b><span>Countries: India, Seychelles, Mali</span></div><div><b>6</b><span>Employers across logistics and F&amp;B</span></div><div><b>8</b><span>Licenses and certifications</span></div></div></section>
+<section id="experience"><p class="eb">Experience</p><h2>Company-wise highlights</h2><div class="jobs">
+<article class="job" style="--c:#9b6bff"><h3>TCsons Food &amp; Beverage</h3><p class="m">SENIOR ACCOUNTANT · BAMAKO, MALI · OCT 2026 – PRESENT</p><ul>
+<li>Run full-cycle accounting in Odoo ERP: ledger entries, bank reconciliations and inventory transaction mapping.</li>
+<li>Build product costing for imported and locally produced F&amp;B goods; audit prices daily to protect gross margin.</li>
+<li>Lead physical stock audits and system reconciliations across warehouses and outlets to find and remove variances.</li>
+<li>Control treasury: daily cash and bank statements, cashbook reconciliations, multi-currency petty cash and monthly trial balances.</li></ul></article>
+<article class="job" style="--c:#4cc3ff"><h3>International Food Solutions Pty Ltd</h3><p class="m">ACCOUNT &amp; EDP EXECUTIVE · SEYCHELLES · FEB 2025 – OCT 2026</p><ul>
+<li>Processed daily sales orders and invoices; kept invoices and credit notes audit-ready.</li>
+<li>Ran returns end to end (damaged, short-expiry, wrong delivery): verified claims, issued credit notes, coordinated with stores.</li>
+<li>Reconciled shop cashier data to the central inventory system to surface and correct stock discrepancies.</li>
+<li>Set sales prices from cost structures and audited daily so no order shipped below cost margin.</li>
+<li>Built form-based automation for sales-return entry (HTML web app and VBA).</li></ul></article>
+<article class="job"><h3>CJ Darcl Logistics Ltd</h3><p class="m">CASHIER · PANIPAT, INDIA · DEC 2024 – FEB 2025</p><ul>
+<li>Prepared vouchers, cash statements and bank statements; processed high-volume purchase bills.</li>
+<li>Reconciled cash books and sundry debtors; built outstanding reports to track receivables and cash flow.</li>
+<li>Handled vendor enquiries and paid vendors on time.</li></ul></article>
+<article class="job"><h3>Adhunik Transport Organisation Ltd</h3><p class="m">ACCOUNT EXECUTIVE · GOREGAON, INDIA · AUG – NOV 2024</p><ul>
+<li>Kept books in Tally Prime: bank reconciliation, cash books, sales and purchase invoice entries.</li>
+<li>Calculated TDS and reconciled GST 2B and sundry debtors to protect ledger integrity and tax credit.</li>
+<li>Prepared monthly reports and outstanding statements for decision support.</li></ul></article>
+<article class="job"><h3>Associated Road Carriers Ltd</h3><p class="m">CASHIER · KUNDLI, HARYANA, INDIA · SEP 2023 – AUG 2024</p><ul>
+<li>Managed cash and bank accounts; reconciled bank statements and inter-branch transactions.</li>
+<li>Audited documents and branch operations; verified paperwork before every payment.</li>
+<li>Negotiated vendor rates (lorries, labour, packing and forwarding) and reviewed client credit limits and payment terms.</li>
+<li>Processed salaries and vendor payments and tracked attendance.</li></ul></article>
+<article class="job"><h3>TCI Express Ltd</h3><p class="m">TRAINING ASSISTANT → IT ASSISTANT → ACCOUNT ASSISTANT → BRANCH INCHARGE → ACCOUNTANT · LUCKNOW &amp; PRAYAGRAJ, INDIA · OCT 2018 – SEP 2023</p><ul>
+<li>Progressed through five roles in five years, from training and IT support into accounts and branch leadership.</li>
+<li>Ran branch finance: cash handling, party ledgers, bank reconciliation, petty-cash and cheque vouchers, outstanding follow-ups and daily collections.</li>
+<li>Produced the monthly business scorecard and business reports and updated daily performance.</li>
+<li>As Branch Incharge, managed bookings, delivery queries and customer relationships and generated new business.</li>
+<li>Handled CBS, BRS and TDS reconciliation alongside budgeting and cost control.</li></ul></article>
+</div></section>
+<section id="skills"><p class="eb">Skills</p><h2>Finance depth, systems fluency</h2><div class="sk">
+<div><h3>Finance &amp; accounting</h3><ul class="ch"><li>O2C</li><li>AR &amp; AP</li><li>Bank reconciliation</li><li>Cash &amp; bank statements</li><li>Product costing</li><li>Month-end close</li><li>Trial balance</li><li>Statutory tax compliance (GST, TDS)</li><li>Sundry debtors</li><li>Petty cash</li><li>Vendor payments</li><li>Branch audit</li></ul></div>
+<div><h3>ERP, automation &amp; BI</h3><ul class="ch"><li>Odoo ERP</li><li>Tally Prime</li><li>ERP Orion</li><li>Excel VBA</li><li>Google Apps Script</li><li>Excel add-ins</li><li>HTML form tools</li><li>Power BI</li><li>Advanced Excel</li></ul></div>
+<div><h3>AI &amp; reporting</h3><ul class="ch"><li>Prompt engineering</li><li>Generative AI tools</li><li>MIS reporting</li><li>Outstanding reports</li><li>Business scorecards</li></ul></div>
+<div><h3>Leadership &amp; operations</h3><ul class="ch"><li>Team building</li><li>Vendor negotiation</li><li>Credit control</li><li>Inventory &amp; stock audit</li><li>Branch operations</li><li>Customer relationships</li><li>Training</li></ul></div>
+<div><h3>Languages</h3><ul class="ch"><li>English · Professional working</li><li>Hindi · Native</li><li>French · Elementary</li></ul></div></div></section>
+<section id="credentials"><p class="eb">Licenses &amp; certifications</p><h2>Credentials</h2><div class="cr">
+<div><b>Tally Prime Certification</b><span>STP Computer Education · Ministry of MSME</span><i>2024 · ERP &amp; ACCOUNTING</i></div>
+<div><b>Advanced Excel Certification</b><span>STP Computer Education · Ministry of MSME</span><i>2024 · DATA &amp; AUTOMATION</i></div>
+<div><b>AI Tools Workshop</b><span>Be10x</span><i>NOV 2025 · AI</i></div>
+<div><b>Power BI for Beginners</b><span>Business intelligence</span><i>ANALYTICS</i></div>
+<div><b>Generative AI Mastermind</b><span>Generative AI</span><i>AI</i></div>
+<div><b>SkillQuest – Generative AI Literacy</b><span>Generative AI</span><i>AI</i></div>
+<div><b>Introduction to MS Excel</b><span>Spreadsheets</span><i>DATA</i></div>
+<div><b>RS-CIT</b><span>Rajasthan State Certificate in Information Technology · Vardhman Mahaveer Open University</span><i>2016–17 · IT FOUNDATION</i></div></div></section>
+<section id="education"><p class="eb">Education</p><h2>Foundation</h2><div class="cr">
+<div><b>Bachelor of Commerce, Accounting &amp; Finance</b><span>Maharaja Ganga Singh University (MGSU), Bikaner</span><i>APR 2017 – MAY 2020</i></div>
+<div><b>Fire &amp; Safety Engineering</b><span>NIFS India · National Institute of Fire and Safety</span><i>2017</i></div></div></section>
+<footer class="ft"><p>Tejender Verma · Senior Accountant · Bamako, Mali</p><p><a href="mailto:tejender978@gmail.com">tejender978@gmail.com</a> · <a href="https://www.linkedin.com/in/tejender-verma-252281117/" target="_blank" rel="noopener">LinkedIn</a></p></footer>
+</div></main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/LuminosityHighPassShader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/ShaderPass.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
 <script>
-// === CUSTOM CURSOR ===
-const cursor = document.getElementById('cursor');
-const ring = document.getElementById('cursorRing');
-let mx = 0, my = 0, rx = 0, ry = 0;
+(function(){
+const $=s=>document.querySelector(s),W=()=>innerWidth,H=()=>innerHeight;
+const sm=(a,b,x)=>{x=Math.min(1,Math.max(0,(x-a)/(b-a)));return x*x*(3-2*x)};
+$('#avi').onerror=()=>{$('#av').textContent='TV'};
+let renderer;try{renderer=new THREE.WebGLRenderer({canvas:$('#c'),antialias:true})}catch(e){$('#p0').style.opacity=1;$('#p3').style.opacity=1;return}
+renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));
+const scene=new THREE.Scene();scene.background=new THREE.Color(0x02030a);scene.fog=new THREE.FogExp2(0x02030a,.028);
+const cam=new THREE.PerspectiveCamera(50,1,.1,200);
+const ec=document.createElement('canvas');ec.width=512;ec.height=256;const e=ec.getContext('2d');
+const eg=e.createLinearGradient(0,0,0,256);eg.addColorStop(0,'#0a1230');eg.addColorStop(.5,'#02030a');eg.addColorStop(1,'#120a2a');e.fillStyle=eg;e.fillRect(0,0,512,256);
+[[60,'#4cc3ff'],[170,'#ffd25e'],[300,'#4cc3ff'],[420,'#9b6bff']].forEach(a=>{e.fillStyle=a[1];e.fillRect(a[0],40,26,150)});
+e.fillStyle='#fff';e.fillRect(230,18,54,20);
+const et=new THREE.CanvasTexture(ec);et.mapping=THREE.EquirectangularReflectionMapping;
+scene.environment=new THREE.PMREMGenerator(renderer).fromEquirectangular(et).texture;
+scene.add(new THREE.AmbientLight(0x6688ff,.4));
+const l1=new THREE.PointLight(0xffd25e,2.2,40);l1.position.set(-6,4,8);const l2=new THREE.PointLight(0x4cc3ff,2.6,40);l2.position.set(6,-2,8);scene.add(l1,l2);
+const gr=new THREE.GridHelper(70,70,0x16407a,0x0b1a33);gr.position.y=-4.4;gr.material.transparent=true;gr.material.opacity=.55;scene.add(gr);
 
-document.addEventListener('mousemove', e => {
-  mx = e.clientX; my = e.clientY;
-  cursor.style.left = mx - 6 + 'px';
-  cursor.style.top = my - 6 + 'px';
-});
+function glassSphere(r,col){const g=new THREE.Group();
+ g.add(new THREE.Mesh(new THREE.SphereGeometry(r,64,48),new THREE.MeshPhysicalMaterial({color:col,transparent:true,opacity:.28,roughness:.12,metalness:.1,clearcoat:1,clearcoatRoughness:.1,envMapIntensity:1.6,depthWrite:false})));
+ g.add(new THREE.Mesh(new THREE.SphereGeometry(r*.38,32,24),new THREE.MeshBasicMaterial({color:col,transparent:true,opacity:.9,blending:THREE.AdditiveBlending})));
+ g.add(new THREE.LineSegments(new THREE.WireframeGeometry(new THREE.IcosahedronGeometry(r*1.02,2)),new THREE.LineBasicMaterial({color:col,transparent:true,opacity:.35,blending:THREE.AdditiveBlending})));
+ const ring=new THREE.Mesh(new THREE.TorusGeometry(r*1.35,r*.018,16,128),new THREE.MeshStandardMaterial({color:0xdfe8f5,metalness:1,roughness:.12}));ring.rotation.x=1.2;g.add(ring);return g}
 
-function animRing() {
-  rx += (mx - rx) * 0.12;
-  ry += (my - ry) * 0.12;
-  ring.style.left = rx - 18 + 'px';
-  ring.style.top = ry - 18 + 'px';
-  requestAnimationFrame(animRing);
-}
-animRing();
+const A=glassSphere(1.7,'#ffc94d'),B=glassSphere(1.4,'#4cc3ff');A.position.set(-3.2,.2,0);B.position.set(3.2,-.1,-.4);scene.add(A,B);
+const JOBS=[['TCI Express','Lucknow, India','2018–23','Training to Accountant','#ffd25e'],['Associated Road Carriers','Kundli, India','2023–24','Cashier','#ffd25e'],['Adhunik Transport','Goregaon, India','2024','Account Executive','#ffd25e'],['CJ Darcl Logistics','Panipat, India','2024–25','Cashier','#ffd25e'],['International Food Solutions','Seychelles','2025–26','Account &amp; EDP Executive','#4cc3ff'],['TCsons Food &amp; Beverage','Bamako, Mali','2026–now','Senior Accountant','#9b6bff']];
+const T=JOBS.map((j,i)=>new THREE.Vector3(-7.5+i*3,Math.sin(i*1.3)*.7,Math.cos(i*.9)*.8));
+const S=JOBS.map((j,i)=>new THREE.Vector3(Math.random()-.5,Math.random()-.5,Math.random()-.5).normalize().multiplyScalar(1.3).add(i<3?A.position:B.position));
+const N=JOBS.map(j=>{const g=glassSphere(.36,j[4]);scene.add(g);return g});
 
-document.querySelectorAll('a, button').forEach(el => {
-  el.addEventListener('mouseenter', () => { cursor.style.transform = 'scale(2)'; ring.style.transform = 'scale(1.5)'; });
-  el.addEventListener('mouseleave', () => { cursor.style.transform = 'scale(1)'; ring.style.transform = 'scale(1)'; });
-});
+const dash=(col,seed)=>{const c=document.createElement('canvas');c.width=512;c.height=320;const x=c.getContext('2d');
+ x.fillStyle='#050b1f';x.fillRect(0,0,512,320);x.fillStyle=col;x.fillRect(0,0,512,30);x.fillStyle='#02030a';x.font='bold 15px sans-serif';x.fillText('POWER BI  ·  VIEW',14,20);
+ for(let k=0;k<3;k++){x.fillStyle='#0e1a3a';x.fillRect(14+k*166,44,154,52);x.fillStyle=col;x.globalAlpha=.8;x.fillRect(26+k*166,58,60+((seed+k)%3)*20,8);x.globalAlpha=.4;x.fillRect(26+k*166,76,100,6);x.globalAlpha=1}
+ for(let b=0;b<10;b++){const h=40+((b*47+seed*31)%100);x.fillStyle=col;x.globalAlpha=.35+b*.06;x.fillRect(24+b*30,300-h,20,h)}x.globalAlpha=1;
+ x.strokeStyle='#fff';x.lineWidth=3;x.beginPath();for(let b=0;b<10;b++){const y=200-((b*53+seed*17)%60)-b*3;b?x.lineTo(34+b*30,y):x.moveTo(34+b*30,y)}x.stroke();
+ x.lineWidth=16;x.strokeStyle='#16264d';x.beginPath();x.arc(420,215,52,0,6.283);x.stroke();x.strokeStyle=col;x.beginPath();x.arc(420,215,52,-1.57,-1.57+6.283*(.55+seed%3*.12));x.stroke();
+ const t=new THREE.CanvasTexture(c);t.anisotropy=4;return t};
+const PR=[['Excel Maximizer','Add-in rebuilt as v2.0','#ffd25e'],['Sales Return Entry','Web form + VBA data entry','#4cc3ff'],['Price List Calculator','Macro-driven pricing workbook','#9b6bff'],['Advanced Email Sender','Apps Script + Google Sheets','#3dffb0']];
+const cards=PR.map((p,i)=>{const g=new THREE.Group();
+ const slab=new THREE.Mesh(new THREE.BoxGeometry(2.7,1.8,.12),new THREE.MeshPhysicalMaterial({color:0xbfdcff,transparent:true,opacity:.2,roughness:.4,clearcoat:1,envMapIntensity:1.5,depthWrite:false}));
+ const scr=new THREE.Mesh(new THREE.PlaneGeometry(2.4,1.5),new THREE.MeshBasicMaterial({map:dash(p[2],i+1),side:THREE.DoubleSide}));
+ const ed=new THREE.LineSegments(new THREE.EdgesGeometry(slab.geometry),new THREE.LineBasicMaterial({color:p[2],transparent:true,opacity:.9,blending:THREE.AdditiveBlending}));
+ g.add(scr,slab,ed);g.userData.b=[(i-1.5)*3.25,Math.sin(i*1.9)*.3,-Math.abs(i-1.5)*.5];g.visible=false;scene.add(g);return g});
 
-// === 3D PARTICLE BACKGROUND ===
-const canvas = document.getElementById('bg-canvas');
-const ctx = canvas.getContext('2d');
-let W, H, particles = [], mouse = { x: W/2, y: H/2 };
+const goldM=new THREE.MeshBasicMaterial({color:0xffd25e,transparent:true,opacity:.95,blending:THREE.AdditiveBlending,depthWrite:false});
+const cyl=new THREE.CylinderGeometry(1,1,1,8,1,true),UP=new THREE.Vector3(0,1,0);
+const mkL=r=>{const m=new THREE.Mesh(cyl,goldM);m.userData.r=r;scene.add(m);return m};
+const setL=(m,a,b,v)=>{const d=b.clone().sub(a),l=d.length();m.visible=v>.02&&l>.01;if(!m.visible)return;m.position.copy(a).addScaledVector(d,.5);m.quaternion.setFromUnitVectors(UP,d.normalize());const r=m.userData.r*v;m.scale.set(r,l,r)};
+const HL=[.016,.026,.016].map(mkL),TL=T.slice(1).map(()=>mkL(.03));
+const PU=Array.from({length:10},()=>{const m=new THREE.Mesh(new THREE.SphereGeometry(.07,10,10),new THREE.MeshBasicMaterial({color:0xfff0b0,transparent:true,blending:THREE.AdditiveBlending}));scene.add(m);return m});
+const along=(pts,t)=>{const n=pts.length-1,f=t*n,i=Math.min(n-1,Math.floor(f));return pts[i].clone().lerp(pts[i+1],f-i)};
 
-function resize() {
-  W = canvas.width = window.innerWidth;
-  H = canvas.height = window.innerHeight;
-}
-resize();
-window.addEventListener('resize', resize);
-document.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+const SN=120,spos=new Float32Array(SN*6),scol=new Float32Array(SN*6),sd=[];
+for(let i=0;i<SN;i++){sd.push({x:(Math.random()-.5)*34,y:(Math.random()-.5)*10,z:-9+Math.random()*12,s:.05+Math.random()*.16,l:.8+Math.random()*1.6});scol.set([0,0,0,.3,.76,1],i*6)}
+const sg=new THREE.BufferGeometry();sg.setAttribute('position',new THREE.BufferAttribute(spos,3));sg.setAttribute('color',new THREE.BufferAttribute(scol,3));
+const streaks=new THREE.LineSegments(sg,new THREE.LineBasicMaterial({vertexColors:true,transparent:true,blending:THREE.AdditiveBlending,depthWrite:false}));streaks.frustumCulled=false;scene.add(streaks);
+const dp=new Float32Array(1500);for(let i=0;i<1500;i+=3){dp[i]=(Math.random()-.5)*36;dp[i+1]=(Math.random()-.5)*14;dp[i+2]=-12+Math.random()*16}
+const dust=new THREE.Points(new THREE.BufferGeometry().setAttribute('position',new THREE.BufferAttribute(dp,3)),new THREE.PointsMaterial({color:0x9fd4ff,size:.04,transparent:true,opacity:.7,blending:THREE.AdditiveBlending,depthWrite:false}));scene.add(dust);
 
-class Particle {
-  constructor() { this.reset(); }
-  reset() {
-    this.x = Math.random() * W;
-    this.y = Math.random() * H;
-    this.z = Math.random() * 1200 + 100;
-    this.ox = this.x;
-    this.oy = this.y;
-    this.size = Math.random() * 1.5 + 0.3;
-    this.speed = Math.random() * 0.3 + 0.05;
-    this.opacity = Math.random() * 0.6 + 0.1;
-    this.color = Math.random() > 0.7 ? '#c9a84c' : '#4a4a6a';
-    this.connected = [];
-  }
-  update() {
-    this.y -= this.speed;
-    const dx = (mouse.x - W/2) / W * 0.5;
-    const dy = (mouse.y - H/2) / H * 0.5;
-    this.x += dx;
-    if (this.y < -10) { this.y = H + 10; this.x = Math.random() * W; }
-  }
-  draw() {
-    const scale = 600 / this.z;
-    const px = (this.x - W/2) * scale + W/2;
-    const py = (this.y - H/2) * scale + H/2;
-    const r = this.size * scale;
-    ctx.beginPath();
-    ctx.arc(px, py, Math.max(0.1, r), 0, Math.PI*2);
-    ctx.fillStyle = this.color;
-    ctx.globalAlpha = this.opacity * (scale * 0.4);
-    ctx.fill();
-    ctx.globalAlpha = 1;
-    return { px, py };
-  }
-}
+const LB=$('#lb'),mk=(h,c)=>{const d=document.createElement('div');d.className='lb'+(c?' '+c:'');d.innerHTML=h;LB.appendChild(d);return d};
+const NL=JOBS.map(j=>mk(`<b>${j[0]}</b><span>${j[3]}</span><i style="--c:${j[4]}">${j[1]} · ${j[2]}</i>`));
+const CL=PR.map(p=>mk(`<b>${p[0]}</b><span>${p[1]}</span>`));
+const HA=mk('<b>Accounting</b><span>O2C · AR · AP · Odoo</span>','big'),HB=mk('<b>Data Science</b><span>Power BI · VBA · Automation</span>','big');
+const pl=(d,v3,off,vis)=>{const v=v3.clone();v.y+=off;v.project(cam);const ok=v.z<1&&vis>.02;d.style.opacity=ok?Math.min(1,vis):0;d.style.transform=`translate(-50%,-50%) translate(${(v.x*.5+.5)*W()}px,${(-v.y*.5+.5)*H()}px)`};
 
-for (let i = 0; i < 180; i++) particles.push(new Particle());
+const K=[[0,0,.6,12,0,0],[.2,0,.3,10.5,0,0],[.4,-6.5,1,10,-6.5,0],[.6,6.5,.5,10,6.5,0],[.66,0,.4,11,0,0],[.72,-4.5,.3,10,-4.5,0],[.9,4.5,.3,10,4.5,0],[1,0,.2,12,0,0]];
+const ks=p=>{let i=0;while(i<K.length-2&&p>K[i+1][0])i++;const a=K[i],b=K[i+1],t=sm(a[0],b[0],p);return [1,2,3,4,5].map(j=>a[j]+(b[j]-a[j])*t)};
+const PN=[[$('#p0'),0,.19],[$('#p1'),.24,.6],[$('#p2'),.66,.9],[$('#p3'),.945,1.01]],hint=$('#hint'),bar=$('#bar');
 
-// Lines between nearby particles
-function drawConnections() {
-  for (let i = 0; i < particles.length; i++) {
-    const a = particles[i];
-    const scaleA = 600 / a.z;
-    const pax = (a.x - W/2) * scaleA + W/2;
-    const pay = (a.y - H/2) * scaleA + H/2;
-    for (let j = i+1; j < particles.length; j++) {
-      const b = particles[j];
-      const scaleB = 600 / b.z;
-      const pbx = (b.x - W/2) * scaleB + W/2;
-      const pby = (b.y - H/2) * scaleB + H/2;
-      const dist = Math.hypot(pax - pbx, pay - pby);
-      if (dist < 100) {
-        ctx.beginPath();
-        ctx.moveTo(pax, pay);
-        ctx.lineTo(pbx, pby);
-        ctx.strokeStyle = `rgba(201,168,76,${(1 - dist/100) * 0.08})`;
-        ctx.lineWidth = 0.5;
-        ctx.stroke();
-      }
-    }
-  }
-}
+let comp=null,zf=1,p=0;
+if(THREE.EffectComposer&&THREE.UnrealBloomPass){comp=new THREE.EffectComposer(renderer);comp.addPass(new THREE.RenderPass(scene,cam));comp.addPass(new THREE.UnrealBloomPass(new THREE.Vector2(W(),H()),.85,.55,.15))}
+const rs=()=>{const w=W(),h=H();renderer.setSize(w,h,false);cam.aspect=w/h;zf=w/h<1?1+(1-w/h)*1.6:1;cam.updateProjectionMatrix();if(comp)comp.setSize(w,h)};
+addEventListener('resize',rs);rs();
 
-function animate() {
-  ctx.clearRect(0, 0, W, H);
-  drawConnections();
-  particles.forEach(p => { p.update(); p.draw(); });
-  requestAnimationFrame(animate);
-}
-animate();
-
-// === SCROLL ANIMATIONS ===
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-      // Animate skill bars
-      entry.target.querySelectorAll('.skill-fill').forEach(bar => {
-        bar.style.width = bar.dataset.width + '%';
-      });
-    }
-  });
-}, { threshold: 0.1 });
-
-document.querySelectorAll('.timeline-item, .skill-category, .cert-card, .stat-item').forEach(el => {
-  observer.observe(el);
-});
-
-// Stagger delays
-document.querySelectorAll('.timeline-item').forEach((el, i) => {
-  el.style.transitionDelay = (i * 0.15) + 's';
-});
-document.querySelectorAll('.skill-category').forEach((el, i) => {
-  el.style.transitionDelay = (i * 0.15) + 's';
-});
-document.querySelectorAll('.cert-card').forEach((el, i) => {
-  el.style.transitionDelay = (i * 0.1) + 's';
-});
-document.querySelectorAll('.stat-item').forEach((el, i) => {
-  el.style.transitionDelay = (i * 0.1) + 's';
-});
-
-// Smooth nav scroll
-document.querySelectorAll('a[href^="#"]').forEach(a => {
-  a.addEventListener('click', e => {
-    e.preventDefault();
-    document.querySelector(a.getAttribute('href'))?.scrollIntoView({ behavior: 'smooth' });
-  });
-});
-
-// Counter animation for stats
-function animateCount(el, target, suffix = '') {
-  let start = 0;
-  const step = target / 40;
-  const timer = setInterval(() => {
-    start += step;
-    if (start >= target) { el.textContent = target + suffix; clearInterval(timer); return; }
-    el.textContent = Math.floor(start) + suffix;
-  }, 30);
-}
-</script>
-</body>
-</html>
+function frame(ms){
+ if(scrollY>$('#sc').offsetHeight){requestAnimationFrame(frame);return}const t=ms/1000,tg=Math.min(1,Math.max(0,scrollY/Math.max(1,$('#sc').offsetHeight-H())));
+ const vel=Math.abs(tg-p);p+=(tg-p)*.07;
+ const m=sm(.2,.38,p),c=sm(.6,.7,p),nv=m*(1-c),hv=Math.max(1-m,sm(.93,.99,p)),cs=c*(1-sm(.92,.98,p));
+ const k=ks(p);cam.position.set(k[0]+Math.sin(t*.25)*.35*(1-m),k[1]+Math.sin(t*.3)*.15,k[2]*zf);cam.lookAt(k[3],k[4],0);
+ [A,B].forEach((g,i)=>{g.visible=hv>.01;g.scale.setScalar(Math.max(.001,hv));g.rotation.y=t*(.12+i*.05);g.rotation.z=Math.sin(t*.2+i)*.1;g.position.y=(i?-.1:.2)+Math.sin(t*.7+i*2)*.12});
+ N.forEach((g,i)=>{g.visible=nv>.01;g.position.copy(S[i]).lerp(T[i],m);g.scale.setScalar(Math.max(.001,nv));g.rotation.y=t*.4+i});
+ const dir=B.position.clone().sub(A.position).normalize();
+ HL.forEach((l,i)=>{const o=new THREE.Vector3(0,(i-1)*.3,0);setL(l,A.position.clone().addScaledVector(dir,.7).add(o),B.position.clone().addScaledVector(dir,-.7).add(o),hv)});
+ TL.forEach((l,i)=>setL(l,N[i].position,N[i+1].position,nv));
+ const hero=m<.5||p>.9,pts=hero?[A.position,B.position]:N.map(g=>g.position),pv=hero?hv:nv;
+ PU.forEach((u,i)=>{u.visible=pv>.05;if(!u.visible)return;u.position.copy(along(pts,(t*.22+i/10)%1));u.scale.setScalar(pv)});
+ cards.forEach((g,i)=>{const b=g.userData.b;g.visible=cs>.01;g.scale.setScalar(Math.max(.001,cs));g.position.set(b[0],b[1]+Math.sin(t*.8+i*1.7)*.12,b[2]);g.rotation.y=Math.sin(t*.45+i*1.3)*.6;g.rotation.x=Math.sin(t*.3+i)*.07});
+ JOBS.forEach((j,i)=>pl(NL[i],N[i].position,i%2?-1.15:1.15,nv));
+ pl(HA,A.position,0,hv);pl(HB,B.position,0,hv);cards.forEach((g,i)=>pl(CL[i],g.position,-1.3,cs));
+ const sp2=1+vel*70;for(let i=0;i<SN;i++){const d=sd[i];d.x+=d.s*sp2;if(d.x>17)d.x-=34;spos.set([d.x-d.l,d.y,d.z,d.x,d.y,d.z],i*6)}
+ sg.attributes.position.needsUpdate=true;dust.rotation.y=t*.01;
+ PN.forEach(a=>{const r=a[1]<=0?1:sm(a[1]-.001,a[1]+.03,p),f=a[2]>=1?1:1-sm(a[2]-.03,a[2],p),o=r*f;a[0].style.opacity=o;a[0].style.pointerEvents=o>.5?'auto':'none'});
+ hint.style.opacity=1-sm(0,.04,p);bar.style.width=p*100+'%';
+ if(comp)comp.render();else renderer.render(scene,cam);
+ requestAnimationFrame(frame)}
+requestAnimationFrame(frame);
+})();
+</script></body></html>
